@@ -1,0 +1,941 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+<meta name="theme-color" content="#0a0f1a"/>
+<title id="page-title">Consultorio — SaludPro</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --p:#1A7FC1;--p2:#38BDF8;--p3:#0EA5E9;
+  --bg:#06090f;--bg2:#0a1020;--bg3:#0f1a2e;
+  --card:#101827;--card2:#141f30;
+  --border:#1a2d45;--border2:#1e3550;
+  --txt:#f0f6ff;--txt2:#7ba4c4;--txt3:#3d6080;
+  --ok:#16A34A;--warn:#D97706;--err:#DC2626;
+  --ff:'Outfit',sans-serif;--fm:'DM Mono',monospace;
+  --r:16px;--rs:10px;
+  --glow:0 0 40px rgba(26,127,193,.18);
+}
+html{scroll-behavior:smooth}
+body{font-family:var(--ff);background:var(--bg);color:var(--txt);overflow-x:hidden;min-height:100vh}
+a{color:inherit;text-decoration:none}
+button{font-family:var(--ff);cursor:pointer;border:none;outline:none}
+input,select,textarea{font-family:var(--ff);outline:none}
+img{max-width:100%}
+
+/* ── LOADER ── */
+#loader{position:fixed;inset:0;background:var(--bg);z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;transition:opacity .5s}
+#loader.hide{opacity:0;pointer-events:none}
+.ld-ring{width:48px;height:48px;border:3px solid var(--border2);border-top-color:var(--p);border-radius:50%;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.ld-txt{font-size:13px;color:var(--txt2)}
+
+/* ── HERO ── */
+.hero{min-height:100svh;display:flex;flex-direction:column;position:relative;overflow:hidden}
+.hero-bg{position:absolute;inset:0;z-index:0}
+.hero-bg::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 0%,rgba(26,127,193,.22) 0%,transparent 70%)}
+.hero-bg::after{content:'';position:absolute;top:-40%;left:-20%;width:140%;height:140%;background:radial-gradient(ellipse 50% 40% at 70% 60%,rgba(56,189,248,.08) 0%,transparent 60%);pointer-events:none}
+.grid-bg{position:absolute;inset:0;opacity:.04;background-image:linear-gradient(var(--border2) 1px,transparent 1px),linear-gradient(90deg,var(--border2) 1px,transparent 1px);background-size:40px 40px}
+
+/* ── NAV ── */
+.nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:14px 20px;display:flex;align-items:center;justify-content:space-between;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);background:rgba(6,9,15,.7);border-bottom:1px solid rgba(26,45,69,.5);transition:background .3s}
+.nav-brand{display:flex;align-items:center;gap:10px}
+.nav-logo{width:36px;height:36px;border-radius:10px;object-fit:contain;display:none}
+.nav-logo.on{display:block}
+.nav-name{font-size:16px;font-weight:700;color:var(--txt)}
+.nav-btn{background:var(--p);color:#fff;padding:9px 18px;border-radius:99px;font-size:14px;font-weight:600;transition:.2s;white-space:nowrap}
+.nav-btn:hover{background:#1570A8;transform:translateY(-1px)}
+
+/* ── HERO CONTENT ── */
+.hero-content{position:relative;z-index:1;flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:100px 20px 60px}
+.hero-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(26,127,193,.12);border:1px solid rgba(26,127,193,.25);color:var(--p2);padding:5px 14px;border-radius:99px;font-size:12px;font-weight:600;letter-spacing:.5px;margin-bottom:24px}
+.hero-badge::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--p2);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.hero-logo-img{width:96px;height:96px;border-radius:20px;object-fit:contain;margin-bottom:20px;display:none;box-shadow:0 8px 32px rgba(0,0,0,.4),var(--glow)}
+.hero-logo-img.on{display:block}
+.hero-title{font-size:clamp(32px,8vw,60px);font-weight:800;letter-spacing:-2px;line-height:1.05;margin-bottom:16px;background:linear-gradient(135deg,#fff 0%,var(--p2) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero-esp{display:inline-block;background:rgba(26,127,193,.15);border:1px solid rgba(26,127,193,.3);color:var(--p2);padding:4px 14px;border-radius:99px;font-size:13px;font-weight:600;margin-bottom:18px;-webkit-text-fill-color:var(--p2)}
+.hero-desc{font-size:16px;color:var(--txt2);max-width:520px;line-height:1.7;margin-bottom:32px}
+.hero-actions{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
+.btn-hero{padding:14px 28px;border-radius:99px;font-size:15px;font-weight:700;transition:.2s;display:flex;align-items:center;gap:8px}
+.btn-hero-p{background:var(--p);color:#fff;box-shadow:0 4px 20px rgba(26,127,193,.4)}
+.btn-hero-p:hover{background:#1570A8;transform:translateY(-2px);box-shadow:0 8px 30px rgba(26,127,193,.5)}
+.btn-hero-s{background:rgba(255,255,255,.06);color:var(--txt);border:1px solid var(--border2)}
+.btn-hero-s:hover{background:rgba(255,255,255,.1);transform:translateY(-2px)}
+.hero-scroll{position:absolute;bottom:28px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:6px;color:var(--txt3);font-size:11px;letter-spacing:.5px;text-transform:uppercase;animation:bob 2s ease-in-out infinite}
+@keyframes bob{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(6px)}}
+.hero-scroll svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.5;stroke-linecap:round}
+
+/* ── INFO CHIPS ── */
+.info-bar{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:28px}
+.info-chip{display:flex;align-items:center;gap:7px;background:rgba(255,255,255,.04);border:1px solid var(--border);padding:7px 14px;border-radius:99px;font-size:13px;color:var(--txt2)}
+.info-chip span{font-weight:600;color:var(--txt)}
+
+/* ── SECCIONES ── */
+section{padding:72px 20px}
+.sec-inner{max-width:700px;margin:0 auto}
+.sec-tag{font-size:11px;font-weight:700;color:var(--p2);letter-spacing:2px;text-transform:uppercase;margin-bottom:10px}
+.sec-title{font-size:clamp(24px,5vw,36px);font-weight:800;letter-spacing:-1px;line-height:1.15;margin-bottom:14px}
+.sec-sub{font-size:15px;color:var(--txt2);line-height:1.7;margin-bottom:32px}
+.divider{height:1px;background:linear-gradient(90deg,transparent,var(--border2),transparent);margin:0 auto;max-width:700px}
+
+/* ══════════════════════════════════════════════
+   SERVICIOS — BARRAS (3 estilos)
+══════════════════════════════════════════════ */
+#sec-servicios{background:var(--bg2)}
+.servicios-stack{display:flex;flex-direction:column;gap:10px}
+
+/* ── Estilo 1: Compact ── */
+.srv-bar.style-compact{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:var(--r);padding:14px 16px;
+  display:flex;align-items:center;gap:14px;
+  cursor:pointer;transition:transform .18s, border-color .18s, box-shadow .18s;
+  animation:barIn .35s ease both;
+}
+.srv-bar.style-compact:hover{
+  border-color:rgba(26,127,193,.45);
+  transform:translateY(-2px) translateX(3px);
+  box-shadow:var(--glow);
+}
+.srv-bar.style-compact .sb-ico{
+  width:48px;height:48px;border-radius:12px;flex-shrink:0;
+  background:rgba(26,127,193,.1);border:1px solid rgba(26,127,193,.18);
+  display:flex;align-items:center;justify-content:center;font-size:24px;overflow:hidden;
+}
+.srv-bar.style-compact .sb-ico img{width:100%;height:100%;object-fit:cover;border-radius:10px}
+.srv-bar.style-compact .sb-body{flex:1;min-width:0}
+.srv-bar.style-compact .sb-name{font-size:15px;font-weight:700;color:var(--txt);margin-bottom:2px}
+.srv-bar.style-compact .sb-desc{font-size:12px;color:var(--txt2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.srv-bar.style-compact .sb-right{display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0}
+.srv-bar.style-compact .sb-price{font-size:13px;font-weight:700;color:var(--p2);font-family:var(--fm)}
+.srv-bar.style-compact .sb-arr{font-size:18px;color:var(--txt3)}
+
+/* ── Estilo 2: Accent ── */
+.srv-bar.style-accent{
+  display:flex;align-items:stretch;
+  border-radius:var(--r);overflow:hidden;
+  border:1px solid var(--border);
+  background:linear-gradient(105deg,var(--card2) 0%,var(--card) 100%);
+  cursor:pointer;transition:transform .18s, border-color .18s, box-shadow .18s;
+  animation:barIn .35s ease both;
+}
+.srv-bar.style-accent:hover{
+  border-color:rgba(26,127,193,.45);
+  transform:translateY(-2px);
+  box-shadow:var(--glow);
+}
+.srv-bar.style-accent .sb-stripe{
+  width:4px;flex-shrink:0;
+  background:linear-gradient(180deg,var(--p),var(--p2));
+}
+.srv-bar.style-accent .sb-inner{
+  display:flex;align-items:center;gap:14px;
+  padding:15px 15px 15px 14px;flex:1;min-width:0;
+}
+.srv-bar.style-accent .sb-ico{
+  width:52px;height:52px;border-radius:14px;flex-shrink:0;
+  background:rgba(56,189,248,.08);
+  box-shadow:0 2px 14px rgba(56,189,248,.12);
+  display:flex;align-items:center;justify-content:center;font-size:26px;overflow:hidden;
+}
+.srv-bar.style-accent .sb-ico img{width:100%;height:100%;object-fit:cover;border-radius:12px}
+.srv-bar.style-accent .sb-body{flex:1;min-width:0}
+.srv-bar.style-accent .sb-name{font-size:15px;font-weight:700;color:var(--txt);margin-bottom:3px}
+.srv-bar.style-accent .sb-desc{font-size:12px;color:var(--txt2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.srv-bar.style-accent .sb-meta{display:flex;align-items:center;gap:8px;margin-top:5px;flex-wrap:wrap}
+.srv-bar.style-accent .sb-price-badge{
+  font-size:11px;font-weight:700;
+  background:rgba(26,127,193,.15);border:1px solid rgba(26,127,193,.25);
+  color:var(--p2);padding:2px 9px;border-radius:99px;font-family:var(--fm);
+}
+.srv-bar.style-accent .sb-dur{font-size:11px;color:var(--txt3)}
+.srv-bar.style-accent .sb-cat{font-size:11px;color:var(--txt3)}
+.srv-bar.style-accent .sb-arr{padding:0 14px;color:var(--txt3);font-size:20px;display:flex;align-items:center;flex-shrink:0}
+
+/* ── Estilo 3: Banner ── */
+.srv-bar.style-banner{
+  border-radius:var(--r);overflow:hidden;
+  border:1px solid var(--border);
+  background:var(--card);
+  cursor:pointer;transition:transform .18s, border-color .18s, box-shadow .18s;
+  animation:barIn .35s ease both;
+}
+.srv-bar.style-banner:hover{
+  border-color:rgba(26,127,193,.45);
+  transform:translateY(-2px);
+  box-shadow:0 10px 40px rgba(0,0,0,.3),var(--glow);
+}
+.srv-bar.style-banner .sb-banner{
+  height:90px;position:relative;overflow:hidden;
+  background:linear-gradient(135deg,rgba(26,127,193,.28),rgba(56,189,248,.14));
+  display:flex;align-items:center;justify-content:center;font-size:38px;
+}
+.srv-bar.style-banner .sb-banner img{
+  position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
+}
+.srv-bar.style-banner .sb-banner-ov{
+  position:absolute;inset:0;
+  background:linear-gradient(180deg,transparent 30%,rgba(6,9,15,.75));
+}
+.srv-bar.style-banner .sb-banner-ico{position:relative;z-index:1}
+.srv-bar.style-banner .sb-bottom{
+  padding:12px 16px 14px;
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+}
+.srv-bar.style-banner .sb-name{font-size:15px;font-weight:700;color:var(--txt)}
+.srv-bar.style-banner .sb-desc{font-size:12px;color:var(--txt2);margin-top:2px}
+.srv-bar.style-banner .sb-price{font-size:15px;font-weight:800;color:var(--ok);flex-shrink:0;letter-spacing:-.3px;font-family:var(--fm)}
+
+@keyframes barIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+
+/* ── MODAL DETALLE SERVICIO ── */
+.srv-modal-bg{
+  position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:600;
+  display:none;align-items:flex-end;justify-content:center;
+  backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+}
+.srv-modal-bg.on{display:flex;animation:fadeIn .2s ease}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.srv-modal{
+  background:var(--card);border:1px solid var(--border2);
+  border-radius:24px 24px 0 0;width:100%;max-width:540px;
+  max-height:90svh;overflow-y:auto;
+  animation:slideUp .25s cubic-bezier(.16,1,.3,1);
+  border-bottom:none;
+}
+@keyframes slideUp{from{transform:translateY(60px);opacity:0}to{transform:none;opacity:1}}
+.smd-handle{width:40px;height:4px;background:var(--border2);border-radius:99px;margin:14px auto 0}
+
+/* Banner del modal */
+.smd-banner{
+  height:160px;position:relative;overflow:hidden;
+  background:linear-gradient(135deg,rgba(26,127,193,.3),rgba(56,189,248,.15));
+  display:flex;align-items:center;justify-content:center;
+  font-size:60px;margin-top:12px;border-radius:16px;
+  margin-left:16px;margin-right:16px;
+}
+.smd-banner img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:16px}
+.smd-banner-ov{position:absolute;inset:0;background:linear-gradient(180deg,transparent 40%,rgba(6,9,15,.6));border-radius:16px}
+.smd-banner-ico{position:relative;z-index:1}
+
+/* Contenido del modal */
+.smd-body{padding:20px 20px 28px}
+.smd-cat{display:inline-flex;align-items:center;gap:5px;background:rgba(26,127,193,.1);border:1px solid rgba(26,127,193,.2);color:var(--p2);padding:3px 11px;border-radius:99px;font-size:11px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;margin-bottom:10px}
+.smd-title{font-size:22px;font-weight:800;letter-spacing:-.5px;margin-bottom:12px;line-height:1.2}
+.smd-price{
+  display:inline-flex;align-items:center;gap:7px;
+  background:rgba(22,163,74,.1);border:1px solid rgba(22,163,74,.22);
+  color:#4ADE80;padding:7px 16px;border-radius:99px;
+  font-size:16px;font-weight:800;margin-bottom:16px;font-family:var(--fm);
+}
+.smd-desc{font-size:14px;color:var(--txt2);line-height:1.75;white-space:pre-wrap;margin-bottom:20px}
+.smd-chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px}
+.smd-chip{
+  display:flex;align-items:center;gap:6px;
+  background:var(--card2);border:1px solid var(--border);
+  border-radius:var(--rs);padding:8px 14px;font-size:13px;color:var(--txt2);
+}
+.smd-chip strong{color:var(--txt);font-weight:600}
+.smd-btn{
+  width:100%;background:var(--p);color:#fff;
+  padding:14px;border-radius:99px;font-size:15px;font-weight:700;
+  transition:.2s;display:flex;align-items:center;justify-content:center;gap:8px;
+}
+.smd-btn:hover{background:#1570A8;transform:translateY(-1px)}
+.smd-close{
+  width:100%;background:transparent;border:1px solid var(--border);
+  color:var(--txt2);padding:11px;border-radius:99px;font-size:14px;
+  font-weight:600;margin-top:10px;transition:.15s;
+}
+.smd-close:hover{background:var(--card2);color:var(--txt)}
+
+/* ── MAPA / UBICACIÓN ── */
+#sec-ubicacion{background:var(--bg)}
+.mapa-wrap{border-radius:var(--r);overflow:hidden;border:1px solid var(--border);height:300px;background:var(--card);display:flex;align-items:center;justify-content:center;color:var(--txt3);font-size:14px;margin-top:20px;position:relative}
+.mapa-wrap iframe{position:absolute;inset:0;width:100%;height:100%;border:none}
+.mapa-placeholder{text-align:center;padding:20px}
+.mapa-placeholder .mi{font-size:40px;margin-bottom:10px}
+.dir-box{background:var(--card);border:1px solid var(--border);border-radius:var(--rs);padding:14px 16px;margin-top:12px;display:flex;align-items:center;gap:12px}
+.dir-box a{color:var(--p2);font-size:14px;font-weight:600}
+.coords-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(26,127,193,.08);border:1px solid rgba(26,127,193,.2);color:var(--txt3);padding:5px 12px;border-radius:99px;font-size:11px;font-family:var(--fm);margin-top:8px}
+
+/* ── REDES SOCIALES ── */
+#sec-redes{background:var(--bg2)}
+.redes-tabs{display:flex;gap:8px;margin-bottom:20px;overflow-x:auto;padding-bottom:4px}
+.rtab{padding:7px 16px;border-radius:99px;font-size:13px;font-weight:600;background:var(--card);border:1px solid var(--border);color:var(--txt2);cursor:pointer;white-space:nowrap;transition:.15s;flex-shrink:0}
+.rtab.on{background:var(--p);color:#fff;border-color:var(--p)}
+.red-panel{display:none}
+.red-panel.on{display:block}
+.embed-wrap{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:16px;min-height:200px;display:flex;align-items:center;justify-content:center}
+.embed-wrap iframe{width:100%;border:none;border-radius:var(--rs)}
+.social-links{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}
+.slink{display:flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--border);padding:10px 16px;border-radius:99px;font-size:14px;font-weight:600;color:var(--txt2);transition:.15s}
+.slink:hover{border-color:var(--p);color:var(--p2);transform:translateY(-1px)}
+.slink svg{width:18px;height:18px;fill:currentColor;flex-shrink:0}
+
+/* ── FORMULARIO SOLICITUD ── */
+#sec-solicitud{background:var(--bg3);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.sol-card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:28px;box-shadow:0 8px 40px rgba(0,0,0,.3),var(--glow)}
+.sol-field{margin-bottom:14px}
+.sol-field label{display:block;font-size:11px;font-weight:700;color:var(--txt2);letter-spacing:.5px;text-transform:uppercase;margin-bottom:6px}
+.sol-field input,.sol-field select,.sol-field textarea{width:100%;background:var(--bg2);border:1px solid var(--border);color:var(--txt);padding:11px 14px;border-radius:var(--rs);font-size:14px;transition:.2s}
+.sol-field input:focus,.sol-field select:focus,.sol-field textarea:focus{border-color:var(--p);box-shadow:0 0 0 3px rgba(26,127,193,.15)}
+.sol-field textarea{resize:vertical;min-height:80px}
+.sol-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.btn-sol{width:100%;background:var(--p);color:#fff;padding:14px;border-radius:var(--rs);font-size:15px;font-weight:700;transition:.2s;margin-top:4px;display:flex;align-items:center;justify-content:center;gap:8px}
+.btn-sol:hover{background:#1570A8;transform:translateY(-1px)}
+.btn-sol:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.sol-success{background:rgba(22,163,74,.1);border:1px solid rgba(22,163,74,.3);color:#4ADE80;padding:16px;border-radius:var(--rs);text-align:center;font-weight:600;display:none;margin-top:12px}
+.sol-success.on{display:block}
+
+/* ── FOOTER ── */
+footer{padding:32px 20px;text-align:center;border-top:1px solid var(--border);color:var(--txt3);font-size:13px}
+footer a{color:var(--p2)}
+
+/* ── TOAST ── */
+#toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--card);border:1px solid var(--border);color:var(--txt);padding:10px 20px;border-radius:99px;font-size:13px;font-weight:600;z-index:9000;transition:transform .3s;white-space:nowrap;box-shadow:0 4px 20px rgba(0,0,0,.5)}
+#toast.on{transform:translateX(-50%) translateY(0)}
+#toast.ok{border-color:rgba(22,163,74,.5);color:#4ADE80}
+#toast.err{border-color:rgba(220,38,38,.5);color:#FCA5A5}
+
+/* ── RESPONSIVE ── */
+@media(min-width:600px){
+  .hero-content{padding:120px 40px 80px}
+  .sol-card{padding:36px}
+  section{padding:88px 40px}
+  .srv-modal-bg{align-items:center}
+  .srv-modal{border-radius:24px;border-bottom:1px solid var(--border2);max-height:80svh}
+}
+@media(max-width:480px){
+  .sol-row{grid-template-columns:1fr}
+  .nav-btn{padding:8px 14px;font-size:13px}
+}
+</style>
+</head>
+<body>
+
+<div id="loader">
+  <div class="ld-ring"></div>
+  <div class="ld-txt">Cargando consultorio...</div>
+</div>
+
+<!-- NAV -->
+<nav class="nav" id="topnav">
+  <div class="nav-brand" onclick="handleLogoTap()" style="cursor:default;user-select:none">
+    <img class="nav-logo" id="nav-logo" src="" alt=""/>
+    <div class="nav-name" id="nav-name">Consultorio</div>
+  </div>
+  <button class="nav-btn" onclick="scrollTo('sec-solicitud')">📋 Solicitar cita</button>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="top">
+  <div class="hero-bg"><div class="grid-bg"></div></div>
+  <div class="hero-content">
+    <div class="hero-badge">✨ Consultorio privado</div>
+    <img class="hero-logo-img" id="hero-logo" src="" alt=""/>
+    <a id="btn-panel-access" href="admin.html" style="display:none;margin-bottom:8px;background:rgba(26,127,193,.12);border:1px solid rgba(26,127,193,.3);color:var(--p2);padding:6px 18px;border-radius:99px;font-size:12px;font-weight:600;letter-spacing:.5px;text-decoration:none">⚙️ Acceder al panel</a>
+    <h1 class="hero-title" id="hero-title">Mi Consultorio</h1>
+    <span class="hero-esp" id="hero-esp">Médico General</span>
+    <p class="hero-desc" id="hero-desc">Atención médica personalizada y de calidad. Tu salud es nuestra prioridad.</p>
+    <div class="hero-actions">
+      <button class="btn-hero btn-hero-p" onclick="scrollTo('sec-solicitud')">📋 Solicitar cita</button>
+      <button class="btn-hero btn-hero-s" onclick="scrollTo('sec-servicios')">Ver servicios</button>
+    </div>
+    <div class="info-bar" id="info-bar"></div>
+  </div>
+  <div class="hero-scroll" onclick="scrollTo('sec-servicios')">
+    <span>Explorar</span>
+    <svg viewBox="0 0 24 24"><polyline points="6,9 12,15 18,9"/></svg>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- SERVICIOS -->
+<section id="sec-servicios">
+  <div class="sec-inner">
+    <div class="sec-tag">Lo que ofrecemos</div>
+    <h2 class="sec-title">Nuestros Servicios</h2>
+    <p class="sec-sub" id="srv-intro">Toca cualquier servicio para ver más detalles y solicitar tu cita.</p>
+    <div class="servicios-stack" id="servicios-stack">
+      <div style="text-align:center;padding:44px;color:var(--txt3)">
+        <div style="font-size:40px;margin-bottom:12px">🏥</div>
+        <div>Cargando servicios...</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- UBICACIÓN -->
+<section id="sec-ubicacion">
+  <div class="sec-inner">
+    <div class="sec-tag">¿Dónde estamos?</div>
+    <h2 class="sec-title">Ubicación</h2>
+    <div id="dir-box" class="dir-box" style="display:none">
+      <span style="font-size:20px">📍</span>
+      <div style="flex:1">
+        <div style="font-size:13px;color:var(--txt2);margin-bottom:2px">Dirección</div>
+        <a id="dir-link" href="#" target="_blank" rel="noopener">—</a>
+        <div id="coords-badge" class="coords-badge" style="display:none">
+          <span>🎯</span><span id="coords-txt"></span>
+        </div>
+      </div>
+    </div>
+    <div class="mapa-wrap" id="mapa-wrap">
+      <div class="mapa-placeholder">
+        <div class="mi">🗺️</div>
+        <div>La ubicación no ha sido configurada</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- REDES SOCIALES -->
+<section id="sec-redes">
+  <div class="sec-inner">
+    <div class="sec-tag">Síguenos</div>
+    <h2 class="sec-title">Redes Sociales</h2>
+    <div class="redes-tabs" id="redes-tabs"></div>
+    <div id="redes-panels"></div>
+    <div class="social-links" id="social-links"></div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- SOLICITUD -->
+<section id="sec-solicitud">
+  <div class="sec-inner">
+    <div class="sec-tag">Agenda tu cita</div>
+    <h2 class="sec-title">Solicitar Cita</h2>
+    <p class="sec-sub">Completa el formulario y nos pondremos en contacto contigo a la brevedad.</p>
+    <div class="sol-card">
+      <div class="sol-row">
+        <div class="sol-field"><label>Nombre completo *</label><input type="text" id="s-nombre" placeholder="María López García"/></div>
+        <div class="sol-field"><label>Teléfono *</label><input type="tel" id="s-tel" placeholder="+52 555 000 0000"/></div>
+      </div>
+      <div class="sol-field"><label>Email</label><input type="email" id="s-email" placeholder="paciente@correo.com"/></div>
+      <div class="sol-row">
+        <div class="sol-field"><label>Servicio de interés</label><select id="s-srv"><option value="">Seleccionar...</option></select></div>
+        <div class="sol-field"><label>Fecha preferida</label><input type="date" id="s-fecha"/></div>
+      </div>
+      <div class="sol-field"><label>Hora preferida</label>
+        <select id="s-hora">
+          <option value="">Sin preferencia</option>
+          <option>08:00</option><option>09:00</option><option>10:00</option>
+          <option>11:00</option><option>12:00</option><option>13:00</option>
+          <option>15:00</option><option>16:00</option><option>17:00</option><option>18:00</option>
+        </select>
+      </div>
+      <div class="sol-field"><label>Motivo de consulta</label><textarea id="s-motivo" placeholder="Describe brevemente tu motivo de consulta..."></textarea></div>
+      <button class="btn-sol" id="btn-sol" onclick="enviarSolicitud()">
+        <span>📋</span><span>Enviar solicitud</span>
+      </button>
+      <div class="sol-success" id="sol-ok">
+        ✅ ¡Solicitud enviada! Te contactaremos pronto para confirmar tu cita.
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer id="site-footer">
+  Powered by <a href="#" id="footer-link">SaludPro</a> · <span id="footer-nombre">Consultorio</span>
+  <span id="admin-link-wrap" style="display:none">
+    · <a href="citas-pro-salud.html" id="admin-link" style="color:var(--txt3);font-size:11px">⚙ Panel</a>
+  </span>
+</footer>
+
+<!-- ══════════════════════════════════════════
+     MODAL DETALLE SERVICIO
+══════════════════════════════════════════ -->
+<div class="srv-modal-bg" id="srv-modal-bg" onclick="closeSrvModal(event)">
+  <div class="srv-modal" id="srv-modal">
+    <div class="smd-handle"></div>
+
+    <!-- Banner imagen/emoji -->
+    <div class="smd-banner" id="smd-banner">
+      <span class="smd-banner-ico" id="smd-banner-ico">🏥</span>
+      <img id="smd-banner-img" src="" alt="" style="display:none"/>
+      <div class="smd-banner-ov"></div>
+    </div>
+
+    <div class="smd-body">
+      <!-- Categoría -->
+      <div id="smd-cat-wrap"></div>
+      <!-- Título -->
+      <div class="smd-title" id="smd-title">Servicio</div>
+      <!-- Precio -->
+      <div id="smd-price-wrap"></div>
+      <!-- Descripción -->
+      <div class="smd-desc" id="smd-desc">Sin descripción disponible.</div>
+      <!-- Meta chips -->
+      <div class="smd-chips" id="smd-chips"></div>
+      <!-- CTA -->
+      <button class="smd-btn" id="smd-cta" onclick="citaDesdeServicio()">
+        📋 Solicitar este servicio
+      </button>
+      <button class="smd-close" onclick="closeSrvModal()">Cerrar</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+// ══════════════════════════════════════════════════
+//  CONFIGURACIÓN — lee desde localStorage de SaludPro
+// ══════════════════════════════════════════════════
+var CFG = {
+  nombre:"", especialidad:"medico", telefono:"",
+  direccion:"", locDireccion:"", lat:"", lng:"",
+  logo:"", color:"#1A7FC1", scriptUrl:"",
+  servicios:[],
+  redes:{ facebook:"",instagram:"",tiktok:"",youtube:"",whatsapp:"" },
+  embed:{ facebook:"",instagram:"" }
+};
+
+var ESP_LABEL = {medico:"Médico General",dentista:"Dentista",psicologo:"Psicólogo",quiropractico:"Quiropráctico"};
+
+// Servicio activo para el CTA del modal
+var _srvActivo = null;
+
+// ── Carga config desde localStorage compartido ──
+function loadConfig(){
+  try {
+    var saved = JSON.parse(localStorage.getItem("sp_cfg")||"{}");
+    if(saved.perfil){
+      if(saved.perfil.nombre)       CFG.nombre       = saved.perfil.nombre;
+      if(saved.perfil.especialidad) CFG.especialidad = saved.perfil.especialidad;
+      if(saved.perfil.telefono)     CFG.telefono     = saved.perfil.telefono;
+      if(saved.perfil.logo)         CFG.logo         = saved.perfil.logo;
+      if(saved.perfil.direccion)    CFG.direccion    = saved.perfil.direccion;
+      if(saved.perfil.locDireccion) CFG.locDireccion = saved.perfil.locDireccion;
+      if(saved.perfil.lat)          CFG.lat          = saved.perfil.lat;
+      if(saved.perfil.lng)          CFG.lng          = saved.perfil.lng;
+    }
+    if(saved.tema&&saved.tema.color) CFG.color    = saved.tema.color;
+    if(saved.url)                    CFG.scriptUrl= saved.url;
+    if(saved.servicios)              CFG.servicios= saved.servicios;
+    if(saved.redes)  CFG.redes  = Object.assign(CFG.redes,  saved.redes);
+    if(saved.embed)  CFG.embed  = Object.assign(CFG.embed,  saved.embed);
+  }catch(e){}
+  // URL params
+  var params = new URLSearchParams(window.location.search);
+  if(params.get("nombre"))   CFG.nombre    = params.get("nombre");
+  if(params.get("url"))      CFG.scriptUrl = params.get("url");
+  if(params.get("lat"))      CFG.lat       = params.get("lat");
+  if(params.get("lng"))      CFG.lng       = params.get("lng");
+}
+
+function applyColor(hex){
+  document.documentElement.style.setProperty("--p",hex);
+  document.documentElement.style.setProperty("--p3",hex);
+  try{
+    var r=parseInt(hex.slice(1,3),16),g=parseInt(hex.slice(3,5),16),b=parseInt(hex.slice(5,7),16);
+    document.documentElement.style.setProperty("--glow","0 0 40px rgba("+r+","+g+","+b+",.18)");
+  }catch(e){}
+  var m=document.querySelector("meta[name=theme-color]");
+  if(m) m.content=hex;
+}
+
+// ── Render completo ──
+function renderPage(){
+  document.getElementById("page-title").textContent=(CFG.nombre||"Consultorio")+" — SaludPro";
+  document.getElementById("nav-name").textContent  =CFG.nombre||"Mi Consultorio";
+  document.getElementById("hero-title").textContent=CFG.nombre||"Mi Consultorio";
+  document.getElementById("hero-esp").textContent  =ESP_LABEL[CFG.especialidad]||CFG.especialidad||"Médico General";
+  document.getElementById("footer-nombre").textContent=CFG.nombre||"Consultorio";
+  if(CFG.color) applyColor(CFG.color);
+  if(CFG.logo){
+    document.getElementById("hero-logo").src=CFG.logo;
+    document.getElementById("hero-logo").classList.add("on");
+    document.getElementById("nav-logo").src=CFG.logo;
+    document.getElementById("nav-logo").classList.add("on");
+  }
+  // Info chips hero
+  var chips=[];
+  if(CFG.telefono)  chips.push('<div class="info-chip">📞 <span>'+esc(CFG.telefono)+'</span></div>');
+  if(CFG.direccion) chips.push('<div class="info-chip">📍 <span>'+esc(CFG.direccion.slice(0,40))+'</span></div>');
+  chips.push('<div class="info-chip">🕐 <span>Lun–Vie</span></div>');
+  document.getElementById("info-bar").innerHTML=chips.join("");
+
+  renderServicios();
+  renderUbicacion();
+  renderRedes();
+}
+
+// ══════════════════════════════════════════════
+//  SERVICIOS — BARRAS (3 estilos)
+// ══════════════════════════════════════════════
+function renderServicios(){
+  var stack  = document.getElementById("servicios-stack");
+  var srvSel = document.getElementById("s-srv");
+  // Solo visibles
+  var srvs = (CFG.servicios||[]).filter(function(s){ return s.visible!==false; });
+  if(!srvs.length) srvs = defaultServicios(CFG.especialidad);
+
+  // Guardar lista activa para que openSrvModal la use
+  _srvListActiva = srvs;
+
+  // Llenar select de solicitud
+  srvSel.innerHTML='<option value="">Seleccionar servicio...</option>';
+  srvs.forEach(function(s){
+    var o=document.createElement("option");
+    o.value=s.nombre;o.textContent=s.nombre;srvSel.appendChild(o);
+  });
+
+  // Render barras con animación stagger
+  stack.innerHTML = srvs.map(function(s,i){
+    return renderBarLanding(s,i);
+  }).join("");
+}
+
+function renderBarLanding(s,i){
+  var style = s.estilo || "compact";
+  var delay = (i*0.07).toFixed(2)+"s";
+  var ico   = buildLandingIco(s,style);
+  var name  = esc(s.nombre||"Servicio");
+  var desc  = esc((s.descripcion||"").slice(0,70));
+  var precio= s.precio ? esc(s.precio) : "";
+  var click = "onclick=\"openSrvModal('"+s.id+"')\"";
+
+  if(style==="compact"){
+    return '<div class="srv-bar style-compact" '+click+' style="animation-delay:'+delay+'">'
+      +ico
+      +'<div class="sb-body">'
+        +'<div class="sb-name">'+name+'</div>'
+        +(desc?'<div class="sb-desc">'+desc+'</div>':'')
+      +'</div>'
+      +'<div class="sb-right">'
+        +(precio?'<div class="sb-price">'+precio+'</div>':'')
+        +'<div class="sb-arr">›</div>'
+      +'</div>'
+      +'</div>';
+  }
+
+  if(style==="accent"){
+    return '<div class="srv-bar style-accent" '+click+' style="animation-delay:'+delay+'">'
+      +'<div class="sb-stripe"></div>'
+      +'<div class="sb-inner">'
+        +ico
+        +'<div class="sb-body">'
+          +'<div class="sb-name">'+name+'</div>'
+          +(desc?'<div class="sb-desc">'+desc+'</div>':'')
+          +((precio||s.duracion||s.categoria)?
+            '<div class="sb-meta">'
+            +(precio?'<span class="sb-price-badge">'+precio+'</span>':'')
+            +(s.duracion?'<span class="sb-dur">⏱ '+esc(s.duracion)+'</span>':'')
+            +(s.categoria?'<span class="sb-cat">· '+esc(s.categoria)+'</span>':'')
+            +'</div>':'')
+        +'</div>'
+      +'</div>'
+      +'<div class="sb-arr">›</div>'
+      +'</div>';
+  }
+
+  // banner
+  return '<div class="srv-bar style-banner" '+click+' style="animation-delay:'+delay+'">'
+    +'<div class="sb-banner">'
+      +(s.icoImg
+        ?'<img src="'+s.icoImg+'" alt="'+name+'"/>'
+        :'<span class="sb-banner-ico">'+esc(s.icono||"🏥")+'</span>')
+      +'<div class="sb-banner-ov"></div>'
+    +'</div>'
+    +'<div class="sb-bottom">'
+      +'<div>'
+        +'<div class="sb-name">'+name+'</div>'
+        +(desc?'<div class="sb-desc">'+desc+'</div>':'')
+      +'</div>'
+      +(precio?'<div class="sb-price">'+precio+'</div>':'')
+    +'</div>'
+    +'</div>';
+}
+
+function buildLandingIco(s,style){
+  if(s.icoImg && style!=="banner"){
+    return '<div class="sb-ico"><img src="'+s.icoImg+'" alt=""/></div>';
+  }
+  if(style!=="banner"){
+    return '<div class="sb-ico">'+(s.icono||"🏥")+'</div>';
+  }
+  return ""; // banner maneja su propio banner
+}
+
+// Lista de servicios activos (usada tanto para render como para el modal)
+var _srvListActiva = [];
+
+// ── Modal detalle de servicio ──
+function openSrvModal(id){
+  var s = _srvListActiva.find(function(x){ return x.id===id; });
+  if(!s) return;
+  _srvActivo = s;
+
+  // Banner
+  var banIco = document.getElementById("smd-banner-ico");
+  var banImg = document.getElementById("smd-banner-img");
+  if(s.icoImg){
+    banIco.style.display="none";
+    banImg.src=s.icoImg; banImg.style.display="block";
+  } else {
+    banIco.textContent=s.icono||"🏥"; banIco.style.display="";
+    banImg.style.display="none"; banImg.src="";
+  }
+
+  // Categoría
+  document.getElementById("smd-cat-wrap").innerHTML=s.categoria
+    ?'<div class="smd-cat">🏷️ '+esc(s.categoria)+'</div>':"";
+
+  // Título
+  document.getElementById("smd-title").textContent=s.nombre||"Servicio";
+
+  // Precio
+  document.getElementById("smd-price-wrap").innerHTML=s.precio
+    ?'<div class="smd-price">💰 '+esc(s.precio)+'</div>':"";
+
+  // Descripción
+  document.getElementById("smd-desc").textContent=s.descripcion||"Consulta directamente para más información sobre este servicio.";
+
+  // Meta chips
+  var chips=[];
+  if(s.duracion)  chips.push('<div class="smd-chip">⏱ <strong>Duración:</strong> '+esc(s.duracion)+'</div>');
+  if(s.categoria) chips.push('<div class="smd-chip">🏷️ <strong>Categoría:</strong> '+esc(s.categoria)+'</div>');
+  if(CFG.telefono)chips.push('<div class="smd-chip">📞 <strong>Tel:</strong> '+esc(CFG.telefono)+'</div>');
+  document.getElementById("smd-chips").innerHTML=chips.join("");
+
+  // CTA texto
+  document.getElementById("smd-cta").innerHTML='📋 Solicitar — '+esc(s.nombre||"este servicio");
+
+  document.getElementById("srv-modal-bg").classList.add("on");
+  document.body.style.overflow="hidden";
+}
+
+function closeSrvModal(e){
+  // Si se llama con evento (click en backdrop), solo cerrar si el click fue en el fondo
+  if(e && e.target && e.target!==document.getElementById("srv-modal-bg")) return;
+  document.getElementById("srv-modal-bg").classList.remove("on");
+  document.body.style.overflow="";
+  _srvActivo=null;
+}
+
+function citaDesdeServicio(){
+  document.getElementById("srv-modal-bg").classList.remove("on");
+  document.body.style.overflow="";
+  if(_srvActivo){
+    var sel=document.getElementById("s-srv");
+    sel.value=_srvActivo.nombre;
+  }
+  setTimeout(function(){scrollTo("sec-solicitud");},100);
+}
+
+// ── Servicios por defecto ──
+function defaultServicios(esp){
+  var d={
+    medico:[
+      {id:"med1",estilo:"compact",icono:"🩺",nombre:"Consulta General",descripcion:"Diagnóstico y tratamiento de enfermedades comunes y padecimientos del día a día.",precio:"",duracion:"30 min",categoria:"General"},
+      {id:"med2",estilo:"accent", icono:"💉",nombre:"Medicina Preventiva",descripcion:"Vacunas, chequeos de rutina y monitoreo de salud integral.",precio:"",duracion:"45 min",categoria:"Preventivo"},
+      {id:"med3",estilo:"compact",icono:"📋",nombre:"Expediente Clínico",descripcion:"Historial médico completo y seguimiento personalizado.",precio:"",duracion:"",categoria:""},
+      {id:"med4",estilo:"banner", icono:"💊",nombre:"Receta Médica",descripcion:"Prescripción de medicamentos certificada por especialista.",precio:"",duracion:"15 min",categoria:""}
+    ],
+    dentista:[
+      {id:"den1",estilo:"accent", icono:"🦷",nombre:"Limpieza Dental",descripcion:"Profilaxis completa y remoción de sarro y placa bacteriana.",precio:"",duracion:"60 min",categoria:"Preventivo"},
+      {id:"den2",estilo:"compact",icono:"✨",nombre:"Blanqueamiento",descripcion:"Blanqueamiento dental profesional con resultados inmediatos.",precio:"",duracion:"90 min",categoria:"Estético"},
+      {id:"den3",estilo:"banner", icono:"🔧",nombre:"Ortodoncia",descripcion:"Brackets metálicos, cerámicos y alineadores invisibles.",precio:"",duracion:"",categoria:"Correctivo"},
+      {id:"den4",estilo:"compact",icono:"🩺",nombre:"Consulta General",descripcion:"Revisión y diagnóstico dental completo.",precio:"",duracion:"30 min",categoria:""}
+    ],
+    psicologo:[
+      {id:"psi1",estilo:"banner", icono:"🧠",nombre:"Terapia Individual",descripcion:"Sesiones personalizadas de psicoterapia cognitivo-conductual.",precio:"",duracion:"50 min",categoria:"Individual"},
+      {id:"psi2",estilo:"accent", icono:"👨‍👩‍👧",nombre:"Terapia Familiar",descripcion:"Intervención familiar sistémica para mejorar la comunicación.",precio:"",duracion:"60 min",categoria:"Familiar"},
+      {id:"psi3",estilo:"compact",icono:"😌",nombre:"Manejo de Ansiedad",descripcion:"Técnicas de regulación emocional y mindfulness.",precio:"",duracion:"50 min",categoria:"Especialidad"},
+      {id:"psi4",estilo:"compact",icono:"📊",nombre:"Evaluación Psicológica",descripcion:"Diagnóstico y perfil psicológico completo.",precio:"",duracion:"90 min",categoria:""}
+    ],
+    quiropractico:[
+      {id:"qui1",estilo:"accent", icono:"🦴",nombre:"Ajuste Quiropráctico",descripcion:"Manipulación vertebral y articular para aliviar el dolor.",precio:"",duracion:"45 min",categoria:"Tratamiento"},
+      {id:"qui2",estilo:"compact",icono:"💆",nombre:"Masaje Terapéutico",descripcion:"Terapia manual de tejidos blandos y puntos de tensión.",precio:"",duracion:"60 min",categoria:"Terapia"},
+      {id:"qui3",estilo:"banner", icono:"🏃",nombre:"Rehabilitación",descripcion:"Ejercicios terapéuticos y terapia de movimiento progresiva.",precio:"",duracion:"",categoria:"Rehabilitación"},
+      {id:"qui4",estilo:"compact",icono:"🩺",nombre:"Consulta Inicial",descripcion:"Evaluación postural completa y plan de tratamiento.",precio:"",duracion:"60 min",categoria:""}
+    ]
+  };
+  return d[esp]||d.medico;
+}
+
+// ══════════════════════════════════════════════
+//  UBICACIÓN
+// ══════════════════════════════════════════════
+function renderUbicacion(){
+  var lat=(CFG.lat||"").trim(),lng=(CFG.lng||"").trim();
+  var loc=(CFG.locDireccion||"").trim(),dir=(CFG.direccion||"").trim();
+  var textoDir=loc||dir;
+  if(!lat&&!lng&&!textoDir)return;
+
+  var box=document.getElementById("dir-box");
+  var link=document.getElementById("dir-link");
+  box.style.display="flex";
+  link.textContent=textoDir||(lat+", "+lng);
+  if(lat&&lng) link.href="https://www.google.com/maps?q="+lat+","+lng;
+  else link.href="https://maps.google.com/?q="+encodeURIComponent(textoDir);
+
+  if(lat&&lng){
+    var badge=document.getElementById("coords-badge");
+    document.getElementById("coords-txt").textContent=parseFloat(lat).toFixed(5)+", "+parseFloat(lng).toFixed(5);
+    badge.style.display="inline-flex";
+  }
+
+  var mapa=document.getElementById("mapa-wrap");
+  if(lat&&lng){
+    var latN=parseFloat(lat),lngN=parseFloat(lng);
+    var bbox=(lngN-0.004)+"%2C"+(latN-0.003)+"%2C"+(lngN+0.004)+"%2C"+(latN+0.003);
+    var osmSrc="https://www.openstreetmap.org/export/embed.html?bbox="+bbox+"&layer=mapnik&marker="+lat+"%2C"+lng;
+    mapa.innerHTML='<iframe loading="lazy" allowfullscreen referrerpolicy="no-referrer-when-downgrade" src="'+osmSrc+'"></iframe>';
+  } else if(textoDir){
+    mapa.innerHTML='<iframe loading="lazy" allowfullscreen referrerpolicy="no-referrer-when-downgrade" src="https://maps.google.com/maps?q='+encodeURIComponent(textoDir)+'&output=embed&z=15"></iframe>';
+  }
+}
+
+// ══════════════════════════════════════════════
+//  REDES SOCIALES
+// ══════════════════════════════════════════════
+function renderRedes(){
+  var tabs=document.getElementById("redes-tabs"),panels=document.getElementById("redes-panels"),links=document.getElementById("social-links");
+  var redes=CFG.redes||{},embed=CFG.embed||{};
+  var items=[
+    {id:"facebook", label:"Facebook", icon:'<svg viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>'},
+    {id:"instagram",label:"Instagram",icon:'<svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>'},
+    {id:"tiktok",   label:"TikTok",   icon:'<svg viewBox="0 0 24 24"><path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5"/></svg>'},
+    {id:"youtube",  label:"YouTube",  icon:'<svg viewBox="0 0 24 24"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46A2.78 2.78 0 0 0 1.46 6.42 29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58 2.78 2.78 0 0 0 1.95 1.95C5.12 20 12 20 12 20s6.88 0 8.59-.47a2.78 2.78 0 0 0 1.95-1.95A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02"/></svg>'},
+    {id:"whatsapp", label:"WhatsApp", icon:'<svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>'}
+  ];
+  var firstTab=true,tabsHTML="",panelsHTML="",linksHTML="";
+  items.forEach(function(item){
+    var url=redes[item.id]||"",emb=embed[item.id]||"";
+    if(!url&&!emb)return;
+    if(url) linksHTML+='<a class="slink" href="'+esc(url)+'" target="_blank" rel="noopener">'+item.icon+'<span>'+item.label+'</span></a>';
+    if(emb&&(item.id==="facebook"||item.id==="instagram")){
+      var active=firstTab?" on":"";firstTab=false;
+      tabsHTML+='<button class="rtab'+active+'" onclick="switchRed(\''+item.id+'\')" data-red="'+item.id+'">'+item.label+'</button>';
+      panelsHTML+='<div class="red-panel'+active+'" id="panel-'+item.id+'"><div class="embed-wrap"><iframe src="'+esc(emb)+'" height="400" scrolling="no" frameborder="0" allowfullscreen></iframe></div></div>';
+    }
+  });
+  if(!linksHTML&&!panelsHTML){ document.getElementById("sec-redes").style.display="none"; return; }
+  tabs.innerHTML=tabsHTML; panels.innerHTML=panelsHTML; links.innerHTML=linksHTML;
+}
+
+function switchRed(id){
+  document.querySelectorAll(".rtab").forEach(function(t){t.classList.toggle("on",t.dataset.red===id);});
+  document.querySelectorAll(".red-panel").forEach(function(p){p.classList.toggle("on",p.id==="panel-"+id);});
+}
+
+// ══════════════════════════════════════════════
+//  ENVIAR SOLICITUD
+// ══════════════════════════════════════════════
+async function enviarSolicitud(){
+  var nombre=document.getElementById("s-nombre").value.trim();
+  var tel=document.getElementById("s-tel").value.trim();
+  if(!nombre||!tel){toast("Nombre y teléfono son obligatorios","err");return;}
+  var btn=document.getElementById("btn-sol");
+  btn.disabled=true;btn.querySelector("span:last-child").textContent="Enviando...";
+  var data={id:String(Date.now()),nombre:nombre,telefono:tel,
+    email:document.getElementById("s-email").value.trim(),
+    servicio:document.getElementById("s-srv").value,
+    fecha:document.getElementById("s-fecha").value,
+    hora:document.getElementById("s-hora").value,
+    motivo:document.getElementById("s-motivo").value.trim(),
+    estado:"Pendiente",fechaSolicitud:new Date().toISOString().slice(0,10)};
+  var ok=false;
+  if(CFG.scriptUrl){
+    try{var qs=new URLSearchParams({action:"addSolicitud",data:JSON.stringify(data)});var res=await fetch(CFG.scriptUrl+"?"+qs.toString());var r=await res.json();ok=r.ok;}catch(e){ok=false;}
+  }
+  try{var stored=JSON.parse(localStorage.getItem("sp_solicitudes")||"[]");stored.unshift(data);localStorage.setItem("sp_solicitudes",JSON.stringify(stored.slice(0,100)));ok=true;}catch(e){}
+  btn.disabled=false;btn.querySelector("span:last-child").textContent="Enviar solicitud";
+  if(ok){
+    document.getElementById("sol-ok").classList.add("on");
+    ["s-nombre","s-tel","s-email","s-motivo"].forEach(function(id){document.getElementById(id).value="";});
+    document.getElementById("s-srv").value="";document.getElementById("s-fecha").value="";
+    toast("✅ Solicitud enviada","ok");
+  }else{
+    toast("Error al enviar. Intenta de nuevo.","err");
+  }
+}
+
+// ── HELPERS ──
+function scrollTo(id){var el=document.getElementById(id);if(el)el.scrollIntoView({behavior:"smooth"});}
+function esc(s){return String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
+var _tt;
+function toast(msg,type){
+  var t=document.getElementById("toast");
+  t.textContent=msg;t.className="on "+(type||"");
+  clearTimeout(_tt);_tt=setTimeout(function(){t.classList.remove("on");},3500);
+}
+
+// ── Cerrar modal con Escape ──
+document.addEventListener("keydown",function(e){
+  if(e.key==="Escape") closeSrvModal();
+});
+
+// ══════════════════════════════════════════════════
+//  LICENCIA — vínculo compartido con citas-pro-salud.html y admin.html
+//  Clave compartida: localStorage "sp_license"
+// ══════════════════════════════════════════════════
+var LICENSE = {
+  propietario: "",
+  token: "",
+  estado: "inactiva",   // "activa" | "inactiva" | "expirada"
+  expira: "",
+  adminPass: ""
+};
+
+function loadLicense(){
+  try {
+    var lic = JSON.parse(localStorage.getItem("sp_license") || "{}");
+    if(lic.propietario) LICENSE.propietario = lic.propietario;
+    if(lic.token)       LICENSE.token       = lic.token;
+    if(lic.estado)      LICENSE.estado      = lic.estado;
+    if(lic.expira)      LICENSE.expira      = lic.expira;
+    if(lic.adminPass)   LICENSE.adminPass   = lic.adminPass;
+  } catch(e) {}
+}
+
+// Acceso al panel de gestión: 5 taps en el nombre del nav
+var _tapCount = 0, _tapT;
+function handleLogoTap(){
+  _tapCount++;
+  clearTimeout(_tapT);
+  if(_tapCount >= 5){
+    _tapCount = 0;
+    document.getElementById("btn-panel-access").style.display = "inline-block";
+    document.getElementById("admin-link-wrap").style.display = "inline";
+  }
+  _tapT = setTimeout(function(){ _tapCount = 0; }, 2000);
+}
+
+// ── INIT ──
+window.addEventListener("DOMContentLoaded",function(){
+  loadLicense();
+  loadConfig();
+  renderPage();
+  document.getElementById("s-fecha").min=new Date().toISOString().slice(0,10);
+
+  // Triple-tap en nav-brand (nombre del consultorio) para mostrar link al panel
+  // El listener ya está en el HTML con onclick="handleLogoTap()"
+
+  // Si la licencia ya está activa, mostrar link al panel discretamente
+  if(LICENSE.estado === "activa"){
+    document.getElementById("admin-link-wrap").style.display = "inline";
+  }
+
+  setTimeout(function(){
+    document.getElementById("loader").classList.add("hide");
+  },600);
+});
+</script>
+</body>
+</html>
