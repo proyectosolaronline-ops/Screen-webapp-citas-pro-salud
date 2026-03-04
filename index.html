@@ -83,15 +83,176 @@ section{padding:72px 20px}
 .sec-sub{font-size:15px;color:var(--txt2);line-height:1.7;margin-bottom:32px}
 .divider{height:1px;background:linear-gradient(90deg,transparent,var(--border2),transparent);margin:0 auto;max-width:700px}
 
-/* ── SERVICIOS ── */
+/* ══════════════════════════════════════════════
+   SERVICIOS — BARRAS (3 estilos)
+══════════════════════════════════════════════ */
 #sec-servicios{background:var(--bg2)}
-.servicios-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px}
-.srv-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:20px;transition:.2s;cursor:default}
-.srv-card:hover{border-color:rgba(26,127,193,.4);transform:translateY(-2px);box-shadow:var(--glow)}
-.srv-icon{font-size:28px;margin-bottom:10px}
-.srv-name{font-size:15px;font-weight:700;color:var(--txt);margin-bottom:6px}
-.srv-desc{font-size:13px;color:var(--txt2);line-height:1.6}
-.srv-precio{font-size:13px;font-weight:700;color:var(--p2);margin-top:10px;font-family:var(--fm)}
+.servicios-stack{display:flex;flex-direction:column;gap:10px}
+
+/* ── Estilo 1: Compact ── */
+.srv-bar.style-compact{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:var(--r);padding:14px 16px;
+  display:flex;align-items:center;gap:14px;
+  cursor:pointer;transition:transform .18s, border-color .18s, box-shadow .18s;
+  animation:barIn .35s ease both;
+}
+.srv-bar.style-compact:hover{
+  border-color:rgba(26,127,193,.45);
+  transform:translateY(-2px) translateX(3px);
+  box-shadow:var(--glow);
+}
+.srv-bar.style-compact .sb-ico{
+  width:48px;height:48px;border-radius:12px;flex-shrink:0;
+  background:rgba(26,127,193,.1);border:1px solid rgba(26,127,193,.18);
+  display:flex;align-items:center;justify-content:center;font-size:24px;overflow:hidden;
+}
+.srv-bar.style-compact .sb-ico img{width:100%;height:100%;object-fit:cover;border-radius:10px}
+.srv-bar.style-compact .sb-body{flex:1;min-width:0}
+.srv-bar.style-compact .sb-name{font-size:15px;font-weight:700;color:var(--txt);margin-bottom:2px}
+.srv-bar.style-compact .sb-desc{font-size:12px;color:var(--txt2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.srv-bar.style-compact .sb-right{display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0}
+.srv-bar.style-compact .sb-price{font-size:13px;font-weight:700;color:var(--p2);font-family:var(--fm)}
+.srv-bar.style-compact .sb-arr{font-size:18px;color:var(--txt3)}
+
+/* ── Estilo 2: Accent ── */
+.srv-bar.style-accent{
+  display:flex;align-items:stretch;
+  border-radius:var(--r);overflow:hidden;
+  border:1px solid var(--border);
+  background:linear-gradient(105deg,var(--card2) 0%,var(--card) 100%);
+  cursor:pointer;transition:transform .18s, border-color .18s, box-shadow .18s;
+  animation:barIn .35s ease both;
+}
+.srv-bar.style-accent:hover{
+  border-color:rgba(26,127,193,.45);
+  transform:translateY(-2px);
+  box-shadow:var(--glow);
+}
+.srv-bar.style-accent .sb-stripe{
+  width:4px;flex-shrink:0;
+  background:linear-gradient(180deg,var(--p),var(--p2));
+}
+.srv-bar.style-accent .sb-inner{
+  display:flex;align-items:center;gap:14px;
+  padding:15px 15px 15px 14px;flex:1;min-width:0;
+}
+.srv-bar.style-accent .sb-ico{
+  width:52px;height:52px;border-radius:14px;flex-shrink:0;
+  background:rgba(56,189,248,.08);
+  box-shadow:0 2px 14px rgba(56,189,248,.12);
+  display:flex;align-items:center;justify-content:center;font-size:26px;overflow:hidden;
+}
+.srv-bar.style-accent .sb-ico img{width:100%;height:100%;object-fit:cover;border-radius:12px}
+.srv-bar.style-accent .sb-body{flex:1;min-width:0}
+.srv-bar.style-accent .sb-name{font-size:15px;font-weight:700;color:var(--txt);margin-bottom:3px}
+.srv-bar.style-accent .sb-desc{font-size:12px;color:var(--txt2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.srv-bar.style-accent .sb-meta{display:flex;align-items:center;gap:8px;margin-top:5px;flex-wrap:wrap}
+.srv-bar.style-accent .sb-price-badge{
+  font-size:11px;font-weight:700;
+  background:rgba(26,127,193,.15);border:1px solid rgba(26,127,193,.25);
+  color:var(--p2);padding:2px 9px;border-radius:99px;font-family:var(--fm);
+}
+.srv-bar.style-accent .sb-dur{font-size:11px;color:var(--txt3)}
+.srv-bar.style-accent .sb-cat{font-size:11px;color:var(--txt3)}
+.srv-bar.style-accent .sb-arr{padding:0 14px;color:var(--txt3);font-size:20px;display:flex;align-items:center;flex-shrink:0}
+
+/* ── Estilo 3: Banner ── */
+.srv-bar.style-banner{
+  border-radius:var(--r);overflow:hidden;
+  border:1px solid var(--border);
+  background:var(--card);
+  cursor:pointer;transition:transform .18s, border-color .18s, box-shadow .18s;
+  animation:barIn .35s ease both;
+}
+.srv-bar.style-banner:hover{
+  border-color:rgba(26,127,193,.45);
+  transform:translateY(-2px);
+  box-shadow:0 10px 40px rgba(0,0,0,.3),var(--glow);
+}
+.srv-bar.style-banner .sb-banner{
+  height:90px;position:relative;overflow:hidden;
+  background:linear-gradient(135deg,rgba(26,127,193,.28),rgba(56,189,248,.14));
+  display:flex;align-items:center;justify-content:center;font-size:38px;
+}
+.srv-bar.style-banner .sb-banner img{
+  position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
+}
+.srv-bar.style-banner .sb-banner-ov{
+  position:absolute;inset:0;
+  background:linear-gradient(180deg,transparent 30%,rgba(6,9,15,.75));
+}
+.srv-bar.style-banner .sb-banner-ico{position:relative;z-index:1}
+.srv-bar.style-banner .sb-bottom{
+  padding:12px 16px 14px;
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+}
+.srv-bar.style-banner .sb-name{font-size:15px;font-weight:700;color:var(--txt)}
+.srv-bar.style-banner .sb-desc{font-size:12px;color:var(--txt2);margin-top:2px}
+.srv-bar.style-banner .sb-price{font-size:15px;font-weight:800;color:var(--ok);flex-shrink:0;letter-spacing:-.3px;font-family:var(--fm)}
+
+@keyframes barIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+
+/* ── MODAL DETALLE SERVICIO ── */
+.srv-modal-bg{
+  position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:600;
+  display:none;align-items:flex-end;justify-content:center;
+  backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+}
+.srv-modal-bg.on{display:flex;animation:fadeIn .2s ease}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.srv-modal{
+  background:var(--card);border:1px solid var(--border2);
+  border-radius:24px 24px 0 0;width:100%;max-width:540px;
+  max-height:90svh;overflow-y:auto;
+  animation:slideUp .25s cubic-bezier(.16,1,.3,1);
+  border-bottom:none;
+}
+@keyframes slideUp{from{transform:translateY(60px);opacity:0}to{transform:none;opacity:1}}
+.smd-handle{width:40px;height:4px;background:var(--border2);border-radius:99px;margin:14px auto 0}
+
+/* Banner del modal */
+.smd-banner{
+  height:160px;position:relative;overflow:hidden;
+  background:linear-gradient(135deg,rgba(26,127,193,.3),rgba(56,189,248,.15));
+  display:flex;align-items:center;justify-content:center;
+  font-size:60px;margin-top:12px;border-radius:16px;
+  margin-left:16px;margin-right:16px;
+}
+.smd-banner img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:16px}
+.smd-banner-ov{position:absolute;inset:0;background:linear-gradient(180deg,transparent 40%,rgba(6,9,15,.6));border-radius:16px}
+.smd-banner-ico{position:relative;z-index:1}
+
+/* Contenido del modal */
+.smd-body{padding:20px 20px 28px}
+.smd-cat{display:inline-flex;align-items:center;gap:5px;background:rgba(26,127,193,.1);border:1px solid rgba(26,127,193,.2);color:var(--p2);padding:3px 11px;border-radius:99px;font-size:11px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;margin-bottom:10px}
+.smd-title{font-size:22px;font-weight:800;letter-spacing:-.5px;margin-bottom:12px;line-height:1.2}
+.smd-price{
+  display:inline-flex;align-items:center;gap:7px;
+  background:rgba(22,163,74,.1);border:1px solid rgba(22,163,74,.22);
+  color:#4ADE80;padding:7px 16px;border-radius:99px;
+  font-size:16px;font-weight:800;margin-bottom:16px;font-family:var(--fm);
+}
+.smd-desc{font-size:14px;color:var(--txt2);line-height:1.75;white-space:pre-wrap;margin-bottom:20px}
+.smd-chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px}
+.smd-chip{
+  display:flex;align-items:center;gap:6px;
+  background:var(--card2);border:1px solid var(--border);
+  border-radius:var(--rs);padding:8px 14px;font-size:13px;color:var(--txt2);
+}
+.smd-chip strong{color:var(--txt);font-weight:600}
+.smd-btn{
+  width:100%;background:var(--p);color:#fff;
+  padding:14px;border-radius:99px;font-size:15px;font-weight:700;
+  transition:.2s;display:flex;align-items:center;justify-content:center;gap:8px;
+}
+.smd-btn:hover{background:#1570A8;transform:translateY(-1px)}
+.smd-close{
+  width:100%;background:transparent;border:1px solid var(--border);
+  color:var(--txt2);padding:11px;border-radius:99px;font-size:14px;
+  font-weight:600;margin-top:10px;transition:.15s;
+}
+.smd-close:hover{background:var(--card2);color:var(--txt)}
 
 /* ── MAPA / UBICACIÓN ── */
 #sec-ubicacion{background:var(--bg)}
@@ -101,11 +262,9 @@ section{padding:72px 20px}
 .mapa-placeholder .mi{font-size:40px;margin-bottom:10px}
 .dir-box{background:var(--card);border:1px solid var(--border);border-radius:var(--rs);padding:14px 16px;margin-top:12px;display:flex;align-items:center;gap:12px}
 .dir-box a{color:var(--p2);font-size:14px;font-weight:600}
-
-/* ── COORDS BADGE ── */
 .coords-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(26,127,193,.08);border:1px solid rgba(26,127,193,.2);color:var(--txt3);padding:5px 12px;border-radius:99px;font-size:11px;font-family:var(--fm);margin-top:8px}
 
-/* ── REDES SOCIALES EMBED ── */
+/* ── REDES SOCIALES ── */
 #sec-redes{background:var(--bg2)}
 .redes-tabs{display:flex;gap:8px;margin-bottom:20px;overflow-x:auto;padding-bottom:4px}
 .rtab{padding:7px 16px;border-radius:99px;font-size:13px;font-weight:600;background:var(--card);border:1px solid var(--border);color:var(--txt2);cursor:pointer;white-space:nowrap;transition:.15s;flex-shrink:0}
@@ -114,8 +273,6 @@ section{padding:72px 20px}
 .red-panel.on{display:block}
 .embed-wrap{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:16px;min-height:200px;display:flex;align-items:center;justify-content:center}
 .embed-wrap iframe{width:100%;border:none;border-radius:var(--rs)}
-.no-embed{text-align:center;color:var(--txt3);font-size:14px;padding:40px 20px}
-.no-embed .nei{font-size:36px;margin-bottom:10px}
 .social-links{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}
 .slink{display:flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--border);padding:10px 16px;border-radius:99px;font-size:14px;font-weight:600;color:var(--txt2);transition:.15s}
 .slink:hover{border-color:var(--p);color:var(--p2);transform:translateY(-1px)}
@@ -151,6 +308,8 @@ footer a{color:var(--p2)}
   .hero-content{padding:120px 40px 80px}
   .sol-card{padding:36px}
   section{padding:88px 40px}
+  .srv-modal-bg{align-items:center}
+  .srv-modal{border-radius:24px;border-bottom:1px solid var(--border2);max-height:80svh}
 }
 @media(max-width:480px){
   .sol-row{grid-template-columns:1fr}
@@ -202,10 +361,10 @@ footer a{color:var(--p2)}
   <div class="sec-inner">
     <div class="sec-tag">Lo que ofrecemos</div>
     <h2 class="sec-title">Nuestros Servicios</h2>
-    <p class="sec-sub" id="srv-intro">Consulta nuestros servicios disponibles y agenda tu cita en línea.</p>
-    <div class="servicios-grid" id="servicios-grid">
-      <div style="text-align:center;padding:40px;color:var(--txt3);grid-column:1/-1">
-        <div style="font-size:36px;margin-bottom:10px">🏥</div>
+    <p class="sec-sub" id="srv-intro">Toca cualquier servicio para ver más detalles y solicitar tu cita.</p>
+    <div class="servicios-stack" id="servicios-stack">
+      <div style="text-align:center;padding:44px;color:var(--txt3)">
+        <div style="font-size:40px;margin-bottom:12px">🏥</div>
         <div>Cargando servicios...</div>
       </div>
     </div>
@@ -292,347 +451,440 @@ footer a{color:var(--p2)}
   Powered by <a href="#" id="footer-link">SaludPro</a> · <span id="footer-nombre">Consultorio</span>
 </footer>
 
+<!-- ══════════════════════════════════════════
+     MODAL DETALLE SERVICIO
+══════════════════════════════════════════ -->
+<div class="srv-modal-bg" id="srv-modal-bg" onclick="closeSrvModal(event)">
+  <div class="srv-modal" id="srv-modal">
+    <div class="smd-handle"></div>
+
+    <!-- Banner imagen/emoji -->
+    <div class="smd-banner" id="smd-banner">
+      <span class="smd-banner-ico" id="smd-banner-ico">🏥</span>
+      <img id="smd-banner-img" src="" alt="" style="display:none"/>
+      <div class="smd-banner-ov"></div>
+    </div>
+
+    <div class="smd-body">
+      <!-- Categoría -->
+      <div id="smd-cat-wrap"></div>
+      <!-- Título -->
+      <div class="smd-title" id="smd-title">Servicio</div>
+      <!-- Precio -->
+      <div id="smd-price-wrap"></div>
+      <!-- Descripción -->
+      <div class="smd-desc" id="smd-desc">Sin descripción disponible.</div>
+      <!-- Meta chips -->
+      <div class="smd-chips" id="smd-chips"></div>
+      <!-- CTA -->
+      <button class="smd-btn" id="smd-cta" onclick="citaDesdeServicio()">
+        📋 Solicitar este servicio
+      </button>
+      <button class="smd-close" onclick="closeSrvModal()">Cerrar</button>
+    </div>
+  </div>
+</div>
+
 <div id="toast"></div>
 
 <script>
 // ══════════════════════════════════════════════════
-//  CONFIGURACIÓN — se lee desde localStorage del
-//  sistema principal (saludpro.html / index.html)
+//  CONFIGURACIÓN — lee desde localStorage de SaludPro
 // ══════════════════════════════════════════════════
-
 var CFG = {
-  nombre:       "",
-  especialidad: "medico",
-  telefono:     "",
-  direccion:    "",       // dirección corta (chip del hero)
-  locDireccion: "",       // dirección completa de sección Ubicación
-  lat:          "",       // latitud GPS (guardada en saludpro.html)
-  lng:          "",       // longitud GPS
-  logo:         "",
-  color:        "#1A7FC1",
-  scriptUrl:    "",
-  servicios:    [],
-  redes:        { facebook:"", instagram:"", tiktok:"", youtube:"", whatsapp:"" },
-  embed:        { facebook:"", instagram:"" }
+  nombre:"", especialidad:"medico", telefono:"",
+  direccion:"", locDireccion:"", lat:"", lng:"",
+  logo:"", color:"#1A7FC1", scriptUrl:"",
+  servicios:[],
+  redes:{ facebook:"",instagram:"",tiktok:"",youtube:"",whatsapp:"" },
+  embed:{ facebook:"",instagram:"" }
 };
 
 var ESP_LABEL = {medico:"Médico General",dentista:"Dentista",psicologo:"Psicólogo",quiropractico:"Quiropráctico"};
 
-// ── Leer config desde localStorage (compartida con saludpro.html) ──
+// Servicio activo para el CTA del modal
+var _srvActivo = null;
+
+// ── Carga config desde localStorage compartido ──
 function loadConfig(){
   try {
-    var saved = JSON.parse(localStorage.getItem("sp_cfg") || "{}");
-    if (saved.perfil) {
-      // Campos base
-      if (saved.perfil.nombre)       CFG.nombre       = saved.perfil.nombre;
-      if (saved.perfil.especialidad) CFG.especialidad = saved.perfil.especialidad;
-      if (saved.perfil.telefono)     CFG.telefono     = saved.perfil.telefono;
-      if (saved.perfil.logo)         CFG.logo         = saved.perfil.logo;
-      // Dirección corta (campo original)
-      if (saved.perfil.direccion)    CFG.direccion    = saved.perfil.direccion;
-      // ── NUEVOS campos de ubicación desde saludpro.html ──
-      if (saved.perfil.locDireccion) CFG.locDireccion = saved.perfil.locDireccion;
-      if (saved.perfil.lat)          CFG.lat          = saved.perfil.lat;
-      if (saved.perfil.lng)          CFG.lng          = saved.perfil.lng;
+    var saved = JSON.parse(localStorage.getItem("sp_cfg")||"{}");
+    if(saved.perfil){
+      if(saved.perfil.nombre)       CFG.nombre       = saved.perfil.nombre;
+      if(saved.perfil.especialidad) CFG.especialidad = saved.perfil.especialidad;
+      if(saved.perfil.telefono)     CFG.telefono     = saved.perfil.telefono;
+      if(saved.perfil.logo)         CFG.logo         = saved.perfil.logo;
+      if(saved.perfil.direccion)    CFG.direccion    = saved.perfil.direccion;
+      if(saved.perfil.locDireccion) CFG.locDireccion = saved.perfil.locDireccion;
+      if(saved.perfil.lat)          CFG.lat          = saved.perfil.lat;
+      if(saved.perfil.lng)          CFG.lng          = saved.perfil.lng;
     }
-    if (saved.tema && saved.tema.color) CFG.color     = saved.tema.color;
-    if (saved.url)                      CFG.scriptUrl = saved.url;
-    if (saved.servicios)                CFG.servicios = saved.servicios;
-    if (saved.redes)  CFG.redes  = Object.assign(CFG.redes,  saved.redes);
-    if (saved.embed)  CFG.embed  = Object.assign(CFG.embed,  saved.embed);
-  } catch(e){}
-
-  // URL params (útil si está en dominio diferente)
+    if(saved.tema&&saved.tema.color) CFG.color    = saved.tema.color;
+    if(saved.url)                    CFG.scriptUrl= saved.url;
+    if(saved.servicios)              CFG.servicios= saved.servicios;
+    if(saved.redes)  CFG.redes  = Object.assign(CFG.redes,  saved.redes);
+    if(saved.embed)  CFG.embed  = Object.assign(CFG.embed,  saved.embed);
+  }catch(e){}
+  // URL params
   var params = new URLSearchParams(window.location.search);
-  if (params.get("nombre"))   CFG.nombre    = params.get("nombre");
-  if (params.get("url"))      CFG.scriptUrl = params.get("url");
-  if (params.get("lat"))      CFG.lat       = params.get("lat");
-  if (params.get("lng"))      CFG.lng       = params.get("lng");
+  if(params.get("nombre"))   CFG.nombre    = params.get("nombre");
+  if(params.get("url"))      CFG.scriptUrl = params.get("url");
+  if(params.get("lat"))      CFG.lat       = params.get("lat");
+  if(params.get("lng"))      CFG.lng       = params.get("lng");
 }
 
-// ── Aplicar color principal ──
 function applyColor(hex){
-  document.documentElement.style.setProperty("--p", hex);
-  document.documentElement.style.setProperty("--p3", hex);
-  try {
-    var r=parseInt(hex.slice(1,3),16), g=parseInt(hex.slice(3,5),16), b=parseInt(hex.slice(5,7),16);
+  document.documentElement.style.setProperty("--p",hex);
+  document.documentElement.style.setProperty("--p3",hex);
+  try{
+    var r=parseInt(hex.slice(1,3),16),g=parseInt(hex.slice(3,5),16),b=parseInt(hex.slice(5,7),16);
     document.documentElement.style.setProperty("--glow","0 0 40px rgba("+r+","+g+","+b+",.18)");
-  } catch(e){}
-  var m = document.querySelector("meta[name=theme-color]");
-  if (m) m.content = hex;
+  }catch(e){}
+  var m=document.querySelector("meta[name=theme-color]");
+  if(m) m.content=hex;
 }
 
-// ── Render página ──
+// ── Render completo ──
 function renderPage(){
-  document.getElementById("page-title").textContent = (CFG.nombre||"Consultorio") + " — SaludPro";
-  document.getElementById("nav-name").textContent   = CFG.nombre || "Mi Consultorio";
-  document.getElementById("hero-title").textContent = CFG.nombre || "Mi Consultorio";
-  document.getElementById("hero-esp").textContent   = ESP_LABEL[CFG.especialidad] || CFG.especialidad || "Médico General";
-  document.getElementById("footer-nombre").textContent = CFG.nombre || "Consultorio";
-
-  if (CFG.color) applyColor(CFG.color);
-
-  if (CFG.logo) {
-    document.getElementById("hero-logo").src = CFG.logo;
+  document.getElementById("page-title").textContent=(CFG.nombre||"Consultorio")+" — SaludPro";
+  document.getElementById("nav-name").textContent  =CFG.nombre||"Mi Consultorio";
+  document.getElementById("hero-title").textContent=CFG.nombre||"Mi Consultorio";
+  document.getElementById("hero-esp").textContent  =ESP_LABEL[CFG.especialidad]||CFG.especialidad||"Médico General";
+  document.getElementById("footer-nombre").textContent=CFG.nombre||"Consultorio";
+  if(CFG.color) applyColor(CFG.color);
+  if(CFG.logo){
+    document.getElementById("hero-logo").src=CFG.logo;
     document.getElementById("hero-logo").classList.add("on");
-    document.getElementById("nav-logo").src  = CFG.logo;
+    document.getElementById("nav-logo").src=CFG.logo;
     document.getElementById("nav-logo").classList.add("on");
   }
-
-  // Info chips en hero: usa dirección corta (campo original)
-  var chips = [];
-  if (CFG.telefono)  chips.push('<div class="info-chip">📞 <span>'+esc(CFG.telefono)+'</span></div>');
-  if (CFG.direccion) chips.push('<div class="info-chip">📍 <span>'+esc(CFG.direccion.slice(0,40))+'</span></div>');
+  // Info chips hero
+  var chips=[];
+  if(CFG.telefono)  chips.push('<div class="info-chip">📞 <span>'+esc(CFG.telefono)+'</span></div>');
+  if(CFG.direccion) chips.push('<div class="info-chip">📍 <span>'+esc(CFG.direccion.slice(0,40))+'</span></div>');
   chips.push('<div class="info-chip">🕐 <span>Lun–Vie</span></div>');
-  document.getElementById("info-bar").innerHTML = chips.join("");
+  document.getElementById("info-bar").innerHTML=chips.join("");
 
   renderServicios();
   renderUbicacion();
   renderRedes();
 }
 
-// ── SERVICIOS ──
+// ══════════════════════════════════════════════
+//  SERVICIOS — BARRAS (3 estilos)
+// ══════════════════════════════════════════════
 function renderServicios(){
-  var grid   = document.getElementById("servicios-grid");
+  var stack  = document.getElementById("servicios-stack");
   var srvSel = document.getElementById("s-srv");
-  var srvs   = (CFG.servicios||[]).filter(function(s){ return s.visible !== false; });
+  // Solo visibles
+  var srvs = (CFG.servicios||[]).filter(function(s){ return s.visible!==false; });
+  if(!srvs.length) srvs = defaultServicios(CFG.especialidad);
 
-  if (!srvs.length) srvs = defaultServicios(CFG.especialidad);
+  // Guardar lista activa para que openSrvModal la use
+  _srvListActiva = srvs;
 
-  srvSel.innerHTML = '<option value="">Seleccionar servicio...</option>';
+  // Llenar select de solicitud
+  srvSel.innerHTML='<option value="">Seleccionar servicio...</option>';
   srvs.forEach(function(s){
-    var o = document.createElement("option");
-    o.value = s.nombre; o.textContent = s.nombre;
-    srvSel.appendChild(o);
+    var o=document.createElement("option");
+    o.value=s.nombre;o.textContent=s.nombre;srvSel.appendChild(o);
   });
 
-  grid.innerHTML = srvs.map(function(s){
-    return '<div class="srv-card">'
-      +'<div class="srv-icon">'+(s.icono||"🏥")+'</div>'
-      +'<div class="srv-name">'+esc(s.nombre)+'</div>'
-      +(s.descripcion?'<div class="srv-desc">'+esc(s.descripcion)+'</div>':"")
-      +(s.precio?'<div class="srv-precio">$'+esc(s.precio)+'</div>':"")
-      +'</div>';
+  // Render barras con animación stagger
+  stack.innerHTML = srvs.map(function(s,i){
+    return renderBarLanding(s,i);
   }).join("");
 }
 
+function renderBarLanding(s,i){
+  var style = s.estilo || "compact";
+  var delay = (i*0.07).toFixed(2)+"s";
+  var ico   = buildLandingIco(s,style);
+  var name  = esc(s.nombre||"Servicio");
+  var desc  = esc((s.descripcion||"").slice(0,70));
+  var precio= s.precio ? esc(s.precio) : "";
+  var click = "onclick=\"openSrvModal('"+s.id+"')\"";
+
+  if(style==="compact"){
+    return '<div class="srv-bar style-compact" '+click+' style="animation-delay:'+delay+'">'
+      +ico
+      +'<div class="sb-body">'
+        +'<div class="sb-name">'+name+'</div>'
+        +(desc?'<div class="sb-desc">'+desc+'</div>':'')
+      +'</div>'
+      +'<div class="sb-right">'
+        +(precio?'<div class="sb-price">'+precio+'</div>':'')
+        +'<div class="sb-arr">›</div>'
+      +'</div>'
+      +'</div>';
+  }
+
+  if(style==="accent"){
+    return '<div class="srv-bar style-accent" '+click+' style="animation-delay:'+delay+'">'
+      +'<div class="sb-stripe"></div>'
+      +'<div class="sb-inner">'
+        +ico
+        +'<div class="sb-body">'
+          +'<div class="sb-name">'+name+'</div>'
+          +(desc?'<div class="sb-desc">'+desc+'</div>':'')
+          +((precio||s.duracion||s.categoria)?
+            '<div class="sb-meta">'
+            +(precio?'<span class="sb-price-badge">'+precio+'</span>':'')
+            +(s.duracion?'<span class="sb-dur">⏱ '+esc(s.duracion)+'</span>':'')
+            +(s.categoria?'<span class="sb-cat">· '+esc(s.categoria)+'</span>':'')
+            +'</div>':'')
+        +'</div>'
+      +'</div>'
+      +'<div class="sb-arr">›</div>'
+      +'</div>';
+  }
+
+  // banner
+  return '<div class="srv-bar style-banner" '+click+' style="animation-delay:'+delay+'">'
+    +'<div class="sb-banner">'
+      +(s.icoImg
+        ?'<img src="'+s.icoImg+'" alt="'+name+'"/>'
+        :'<span class="sb-banner-ico">'+esc(s.icono||"🏥")+'</span>')
+      +'<div class="sb-banner-ov"></div>'
+    +'</div>'
+    +'<div class="sb-bottom">'
+      +'<div>'
+        +'<div class="sb-name">'+name+'</div>'
+        +(desc?'<div class="sb-desc">'+desc+'</div>':'')
+      +'</div>'
+      +(precio?'<div class="sb-price">'+precio+'</div>':'')
+    +'</div>'
+    +'</div>';
+}
+
+function buildLandingIco(s,style){
+  if(s.icoImg && style!=="banner"){
+    return '<div class="sb-ico"><img src="'+s.icoImg+'" alt=""/></div>';
+  }
+  if(style!=="banner"){
+    return '<div class="sb-ico">'+(s.icono||"🏥")+'</div>';
+  }
+  return ""; // banner maneja su propio banner
+}
+
+// Lista de servicios activos (usada tanto para render como para el modal)
+var _srvListActiva = [];
+
+// ── Modal detalle de servicio ──
+function openSrvModal(id){
+  var s = _srvListActiva.find(function(x){ return x.id===id; });
+  if(!s) return;
+  _srvActivo = s;
+
+  // Banner
+  var banIco = document.getElementById("smd-banner-ico");
+  var banImg = document.getElementById("smd-banner-img");
+  if(s.icoImg){
+    banIco.style.display="none";
+    banImg.src=s.icoImg; banImg.style.display="block";
+  } else {
+    banIco.textContent=s.icono||"🏥"; banIco.style.display="";
+    banImg.style.display="none"; banImg.src="";
+  }
+
+  // Categoría
+  document.getElementById("smd-cat-wrap").innerHTML=s.categoria
+    ?'<div class="smd-cat">🏷️ '+esc(s.categoria)+'</div>':"";
+
+  // Título
+  document.getElementById("smd-title").textContent=s.nombre||"Servicio";
+
+  // Precio
+  document.getElementById("smd-price-wrap").innerHTML=s.precio
+    ?'<div class="smd-price">💰 '+esc(s.precio)+'</div>':"";
+
+  // Descripción
+  document.getElementById("smd-desc").textContent=s.descripcion||"Consulta directamente para más información sobre este servicio.";
+
+  // Meta chips
+  var chips=[];
+  if(s.duracion)  chips.push('<div class="smd-chip">⏱ <strong>Duración:</strong> '+esc(s.duracion)+'</div>');
+  if(s.categoria) chips.push('<div class="smd-chip">🏷️ <strong>Categoría:</strong> '+esc(s.categoria)+'</div>');
+  if(CFG.telefono)chips.push('<div class="smd-chip">📞 <strong>Tel:</strong> '+esc(CFG.telefono)+'</div>');
+  document.getElementById("smd-chips").innerHTML=chips.join("");
+
+  // CTA texto
+  document.getElementById("smd-cta").innerHTML='📋 Solicitar — '+esc(s.nombre||"este servicio");
+
+  document.getElementById("srv-modal-bg").classList.add("on");
+  document.body.style.overflow="hidden";
+}
+
+function closeSrvModal(e){
+  // Si se llama con evento (click en backdrop), solo cerrar si el click fue en el fondo
+  if(e && e.target && e.target!==document.getElementById("srv-modal-bg")) return;
+  document.getElementById("srv-modal-bg").classList.remove("on");
+  document.body.style.overflow="";
+  _srvActivo=null;
+}
+
+function citaDesdeServicio(){
+  document.getElementById("srv-modal-bg").classList.remove("on");
+  document.body.style.overflow="";
+  if(_srvActivo){
+    var sel=document.getElementById("s-srv");
+    sel.value=_srvActivo.nombre;
+  }
+  setTimeout(function(){scrollTo("sec-solicitud");},100);
+}
+
+// ── Servicios por defecto ──
 function defaultServicios(esp){
-  var d = {
+  var d={
     medico:[
-      {icono:"🩺",nombre:"Consulta General",descripcion:"Diagnóstico y tratamiento de enfermedades comunes",precio:""},
-      {icono:"💉",nombre:"Medicina Preventiva",descripcion:"Vacunas y chequeos de rutina",precio:""},
-      {icono:"📋",nombre:"Expediente Clínico",descripcion:"Historial médico completo y seguimiento",precio:""},
-      {icono:"💊",nombre:"Receta Médica",descripcion:"Prescripción de medicamentos certificada",precio:""}
+      {id:"med1",estilo:"compact",icono:"🩺",nombre:"Consulta General",descripcion:"Diagnóstico y tratamiento de enfermedades comunes y padecimientos del día a día.",precio:"",duracion:"30 min",categoria:"General"},
+      {id:"med2",estilo:"accent", icono:"💉",nombre:"Medicina Preventiva",descripcion:"Vacunas, chequeos de rutina y monitoreo de salud integral.",precio:"",duracion:"45 min",categoria:"Preventivo"},
+      {id:"med3",estilo:"compact",icono:"📋",nombre:"Expediente Clínico",descripcion:"Historial médico completo y seguimiento personalizado.",precio:"",duracion:"",categoria:""},
+      {id:"med4",estilo:"banner", icono:"💊",nombre:"Receta Médica",descripcion:"Prescripción de medicamentos certificada por especialista.",precio:"",duracion:"15 min",categoria:""}
     ],
     dentista:[
-      {icono:"🦷",nombre:"Limpieza Dental",descripcion:"Profilaxis y remoción de sarro",precio:""},
-      {icono:"✨",nombre:"Blanqueamiento",descripcion:"Blanqueamiento dental profesional",precio:""},
-      {icono:"🔧",nombre:"Ortodoncia",descripcion:"Brackets y alineadores",precio:""},
-      {icono:"🩺",nombre:"Consulta General",descripcion:"Revisión y diagnóstico dental",precio:""}
+      {id:"den1",estilo:"accent", icono:"🦷",nombre:"Limpieza Dental",descripcion:"Profilaxis completa y remoción de sarro y placa bacteriana.",precio:"",duracion:"60 min",categoria:"Preventivo"},
+      {id:"den2",estilo:"compact",icono:"✨",nombre:"Blanqueamiento",descripcion:"Blanqueamiento dental profesional con resultados inmediatos.",precio:"",duracion:"90 min",categoria:"Estético"},
+      {id:"den3",estilo:"banner", icono:"🔧",nombre:"Ortodoncia",descripcion:"Brackets metálicos, cerámicos y alineadores invisibles.",precio:"",duracion:"",categoria:"Correctivo"},
+      {id:"den4",estilo:"compact",icono:"🩺",nombre:"Consulta General",descripcion:"Revisión y diagnóstico dental completo.",precio:"",duracion:"30 min",categoria:""}
     ],
     psicologo:[
-      {icono:"🧠",nombre:"Terapia Individual",descripcion:"Sesiones personalizadas de psicoterapia",precio:""},
-      {icono:"👨‍👩‍👧",nombre:"Terapia Familiar",descripcion:"Intervención familiar sistémica",precio:""},
-      {icono:"😌",nombre:"Manejo de Ansiedad",descripcion:"Técnicas de regulación emocional",precio:""},
-      {icono:"📊",nombre:"Evaluación Psicológica",descripcion:"Diagnóstico y perfil psicológico",precio:""}
+      {id:"psi1",estilo:"banner", icono:"🧠",nombre:"Terapia Individual",descripcion:"Sesiones personalizadas de psicoterapia cognitivo-conductual.",precio:"",duracion:"50 min",categoria:"Individual"},
+      {id:"psi2",estilo:"accent", icono:"👨‍👩‍👧",nombre:"Terapia Familiar",descripcion:"Intervención familiar sistémica para mejorar la comunicación.",precio:"",duracion:"60 min",categoria:"Familiar"},
+      {id:"psi3",estilo:"compact",icono:"😌",nombre:"Manejo de Ansiedad",descripcion:"Técnicas de regulación emocional y mindfulness.",precio:"",duracion:"50 min",categoria:"Especialidad"},
+      {id:"psi4",estilo:"compact",icono:"📊",nombre:"Evaluación Psicológica",descripcion:"Diagnóstico y perfil psicológico completo.",precio:"",duracion:"90 min",categoria:""}
     ],
     quiropractico:[
-      {icono:"🦴",nombre:"Ajuste Quiropráctico",descripcion:"Manipulación vertebral y articular",precio:""},
-      {icono:"💆",nombre:"Masaje Terapéutico",descripcion:"Terapia manual de tejidos blandos",precio:""},
-      {icono:"🏃",nombre:"Rehabilitación",descripcion:"Ejercicios y terapia de movimiento",precio:""},
-      {icono:"🩺",nombre:"Consulta Inicial",descripcion:"Evaluación postural completa",precio:""}
+      {id:"qui1",estilo:"accent", icono:"🦴",nombre:"Ajuste Quiropráctico",descripcion:"Manipulación vertebral y articular para aliviar el dolor.",precio:"",duracion:"45 min",categoria:"Tratamiento"},
+      {id:"qui2",estilo:"compact",icono:"💆",nombre:"Masaje Terapéutico",descripcion:"Terapia manual de tejidos blandos y puntos de tensión.",precio:"",duracion:"60 min",categoria:"Terapia"},
+      {id:"qui3",estilo:"banner", icono:"🏃",nombre:"Rehabilitación",descripcion:"Ejercicios terapéuticos y terapia de movimiento progresiva.",precio:"",duracion:"",categoria:"Rehabilitación"},
+      {id:"qui4",estilo:"compact",icono:"🩺",nombre:"Consulta Inicial",descripcion:"Evaluación postural completa y plan de tratamiento.",precio:"",duracion:"60 min",categoria:""}
     ]
   };
-  return d[esp] || d.medico;
+  return d[esp]||d.medico;
 }
 
 // ══════════════════════════════════════════════
-//  UBICACIÓN — lógica de prioridad:
-//  1) lat + lng  → OpenStreetMap embed (más preciso, sin API key)
-//  2) locDireccion → Google Maps embed por texto (dirección completa)
-//  3) direccion    → Google Maps embed por texto (dirección corta)
-//  El enlace "Abrir en Maps" siempre usa coords si están disponibles.
+//  UBICACIÓN
 // ══════════════════════════════════════════════
 function renderUbicacion(){
-  var lat = (CFG.lat  || "").trim();
-  var lng = (CFG.lng  || "").trim();
-  var loc = (CFG.locDireccion || "").trim();
-  var dir = (CFG.direccion    || "").trim();
+  var lat=(CFG.lat||"").trim(),lng=(CFG.lng||"").trim();
+  var loc=(CFG.locDireccion||"").trim(),dir=(CFG.direccion||"").trim();
+  var textoDir=loc||dir;
+  if(!lat&&!lng&&!textoDir)return;
 
-  // Texto a mostrar como dirección (prioridad: locDireccion > direccion)
-  var textoDir = loc || dir;
+  var box=document.getElementById("dir-box");
+  var link=document.getElementById("dir-link");
+  box.style.display="flex";
+  link.textContent=textoDir||(lat+", "+lng);
+  if(lat&&lng) link.href="https://www.google.com/maps?q="+lat+","+lng;
+  else link.href="https://maps.google.com/?q="+encodeURIComponent(textoDir);
 
-  // Si no hay absolutamente nada, dejar placeholder
-  if (!lat && !lng && !textoDir) return;
-
-  // ── Caja de dirección ──
-  var box  = document.getElementById("dir-box");
-  var link = document.getElementById("dir-link");
-  box.style.display = "flex";
-
-  // Texto del enlace
-  link.textContent = textoDir || (lat + ", " + lng);
-
-  // URL del enlace: coords si hay, si no búsqueda por texto
-  if (lat && lng) {
-    link.href = "https://www.google.com/maps?q=" + lat + "," + lng;
-  } else {
-    link.href = "https://maps.google.com/?q=" + encodeURIComponent(textoDir);
+  if(lat&&lng){
+    var badge=document.getElementById("coords-badge");
+    document.getElementById("coords-txt").textContent=parseFloat(lat).toFixed(5)+", "+parseFloat(lng).toFixed(5);
+    badge.style.display="inline-flex";
   }
 
-  // Badge de coordenadas GPS (solo si hay coords)
-  if (lat && lng) {
-    var badge = document.getElementById("coords-badge");
-    var coordsTxt = document.getElementById("coords-txt");
-    badge.style.display = "inline-flex";
-    coordsTxt.textContent = parseFloat(lat).toFixed(5) + ", " + parseFloat(lng).toFixed(5);
-  }
-
-  // ── Embed del mapa ──
-  var mapa = document.getElementById("mapa-wrap");
-
-  if (lat && lng) {
-    // Opción 1: OpenStreetMap con coordenadas exactas (no requiere API key)
-    var latN = parseFloat(lat), lngN = parseFloat(lng);
-    var bbox = (lngN-0.004)+"%2C"+(latN-0.003)+"%2C"+(lngN+0.004)+"%2C"+(latN+0.003);
-    var osmSrc = "https://www.openstreetmap.org/export/embed.html"
-      + "?bbox=" + bbox
-      + "&layer=mapnik"
-      + "&marker=" + lat + "%2C" + lng;
-    mapa.innerHTML = '<iframe loading="lazy" allowfullscreen referrerpolicy="no-referrer-when-downgrade" src="' + osmSrc + '"></iframe>';
-
-  } else if (textoDir) {
-    // Opción 2: Google Maps embed por texto
-    var q = encodeURIComponent(textoDir);
-    mapa.innerHTML = '<iframe loading="lazy" allowfullscreen referrerpolicy="no-referrer-when-downgrade" src="https://maps.google.com/maps?q='+q+'&output=embed&z=15"></iframe>';
+  var mapa=document.getElementById("mapa-wrap");
+  if(lat&&lng){
+    var latN=parseFloat(lat),lngN=parseFloat(lng);
+    var bbox=(lngN-0.004)+"%2C"+(latN-0.003)+"%2C"+(lngN+0.004)+"%2C"+(latN+0.003);
+    var osmSrc="https://www.openstreetmap.org/export/embed.html?bbox="+bbox+"&layer=mapnik&marker="+lat+"%2C"+lng;
+    mapa.innerHTML='<iframe loading="lazy" allowfullscreen referrerpolicy="no-referrer-when-downgrade" src="'+osmSrc+'"></iframe>';
+  } else if(textoDir){
+    mapa.innerHTML='<iframe loading="lazy" allowfullscreen referrerpolicy="no-referrer-when-downgrade" src="https://maps.google.com/maps?q='+encodeURIComponent(textoDir)+'&output=embed&z=15"></iframe>';
   }
 }
 
-// ── REDES SOCIALES ──
+// ══════════════════════════════════════════════
+//  REDES SOCIALES
+// ══════════════════════════════════════════════
 function renderRedes(){
-  var tabs   = document.getElementById("redes-tabs");
-  var panels = document.getElementById("redes-panels");
-  var links  = document.getElementById("social-links");
-  var redes  = CFG.redes || {};
-  var embed  = CFG.embed || {};
-
-  var items = [
-    { id:"facebook",  label:"Facebook",  icon:'<svg viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>', color:"#1877F2" },
-    { id:"instagram", label:"Instagram", icon:'<svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>', color:"#E4405F" },
-    { id:"tiktok",    label:"TikTok",    icon:'<svg viewBox="0 0 24 24"><path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5"/></svg>', color:"#010101" },
-    { id:"youtube",   label:"YouTube",   icon:'<svg viewBox="0 0 24 24"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46A2.78 2.78 0 0 0 1.46 6.42 29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58 2.78 2.78 0 0 0 1.95 1.95C5.12 20 12 20 12 20s6.88 0 8.59-.47a2.78 2.78 0 0 0 1.95-1.95A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02"/></svg>', color:"#FF0000" },
-    { id:"whatsapp",  label:"WhatsApp",  icon:'<svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>', color:"#25D366" }
+  var tabs=document.getElementById("redes-tabs"),panels=document.getElementById("redes-panels"),links=document.getElementById("social-links");
+  var redes=CFG.redes||{},embed=CFG.embed||{};
+  var items=[
+    {id:"facebook", label:"Facebook", icon:'<svg viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>'},
+    {id:"instagram",label:"Instagram",icon:'<svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>'},
+    {id:"tiktok",   label:"TikTok",   icon:'<svg viewBox="0 0 24 24"><path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5"/></svg>'},
+    {id:"youtube",  label:"YouTube",  icon:'<svg viewBox="0 0 24 24"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46A2.78 2.78 0 0 0 1.46 6.42 29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58 2.78 2.78 0 0 0 1.95 1.95C5.12 20 12 20 12 20s6.88 0 8.59-.47a2.78 2.78 0 0 0 1.95-1.95A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02"/></svg>'},
+    {id:"whatsapp", label:"WhatsApp", icon:'<svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>'}
   ];
-
-  var firstTab = true;
-  var tabsHTML = "", panelsHTML = "", linksHTML = "";
-
+  var firstTab=true,tabsHTML="",panelsHTML="",linksHTML="";
   items.forEach(function(item){
-    var url = redes[item.id] || "";
-    var emb = embed[item.id] || "";
-    if (!url && !emb) return;
-
-    if (url) {
-      linksHTML += '<a class="slink" href="'+esc(url)+'" target="_blank" rel="noopener">'+item.icon+'<span>'+item.label+'</span></a>';
-    }
-
-    if (emb && (item.id==="facebook"||item.id==="instagram")) {
-      var active = firstTab ? " on" : "";
-      firstTab = false;
-      tabsHTML   += '<button class="rtab'+active+'" onclick="switchRed(\''+item.id+'\')" data-red="'+item.id+'">'+item.label+'</button>';
-      panelsHTML += '<div class="red-panel'+active+'" id="panel-'+item.id+'">'
-        +'<div class="embed-wrap"><iframe src="'+esc(emb)+'" height="400" scrolling="no" frameborder="0" allowfullscreen></iframe></div></div>';
+    var url=redes[item.id]||"",emb=embed[item.id]||"";
+    if(!url&&!emb)return;
+    if(url) linksHTML+='<a class="slink" href="'+esc(url)+'" target="_blank" rel="noopener">'+item.icon+'<span>'+item.label+'</span></a>';
+    if(emb&&(item.id==="facebook"||item.id==="instagram")){
+      var active=firstTab?" on":"";firstTab=false;
+      tabsHTML+='<button class="rtab'+active+'" onclick="switchRed(\''+item.id+'\')" data-red="'+item.id+'">'+item.label+'</button>';
+      panelsHTML+='<div class="red-panel'+active+'" id="panel-'+item.id+'"><div class="embed-wrap"><iframe src="'+esc(emb)+'" height="400" scrolling="no" frameborder="0" allowfullscreen></iframe></div></div>';
     }
   });
-
-  if (!linksHTML && !panelsHTML) {
-    document.getElementById("sec-redes").style.display = "none";
-    return;
-  }
-
-  tabs.innerHTML   = tabsHTML;
-  panels.innerHTML = panelsHTML;
-  links.innerHTML  = linksHTML;
+  if(!linksHTML&&!panelsHTML){ document.getElementById("sec-redes").style.display="none"; return; }
+  tabs.innerHTML=tabsHTML; panels.innerHTML=panelsHTML; links.innerHTML=linksHTML;
 }
 
 function switchRed(id){
-  document.querySelectorAll(".rtab").forEach(function(t){ t.classList.toggle("on", t.dataset.red===id); });
-  document.querySelectorAll(".red-panel").forEach(function(p){ p.classList.toggle("on", p.id==="panel-"+id); });
+  document.querySelectorAll(".rtab").forEach(function(t){t.classList.toggle("on",t.dataset.red===id);});
+  document.querySelectorAll(".red-panel").forEach(function(p){p.classList.toggle("on",p.id==="panel-"+id);});
 }
 
-// ── ENVIAR SOLICITUD ──
+// ══════════════════════════════════════════════
+//  ENVIAR SOLICITUD
+// ══════════════════════════════════════════════
 async function enviarSolicitud(){
-  var nombre = document.getElementById("s-nombre").value.trim();
-  var tel    = document.getElementById("s-tel").value.trim();
-  if (!nombre||!tel){ toast("Nombre y teléfono son obligatorios","err"); return; }
-
-  var btn = document.getElementById("btn-sol");
-  btn.disabled = true;
-  btn.querySelector("span:last-child").textContent = "Enviando...";
-
-  var data = {
-    id:             String(Date.now()),
-    nombre:         nombre,
-    telefono:       tel,
-    email:          document.getElementById("s-email").value.trim(),
-    servicio:       document.getElementById("s-srv").value,
-    fecha:          document.getElementById("s-fecha").value,
-    hora:           document.getElementById("s-hora").value,
-    motivo:         document.getElementById("s-motivo").value.trim(),
-    estado:         "Pendiente",
-    fechaSolicitud: new Date().toISOString().slice(0,10)
-  };
-
-  var ok = false;
-  if (CFG.scriptUrl) {
-    try {
-      var qs = new URLSearchParams({ action:"addSolicitud", data:JSON.stringify(data) });
-      var res = await fetch(CFG.scriptUrl + "?" + qs.toString());
-      var r = await res.json();
-      ok = r.ok;
-    } catch(e){ ok = false; }
+  var nombre=document.getElementById("s-nombre").value.trim();
+  var tel=document.getElementById("s-tel").value.trim();
+  if(!nombre||!tel){toast("Nombre y teléfono son obligatorios","err");return;}
+  var btn=document.getElementById("btn-sol");
+  btn.disabled=true;btn.querySelector("span:last-child").textContent="Enviando...";
+  var data={id:String(Date.now()),nombre:nombre,telefono:tel,
+    email:document.getElementById("s-email").value.trim(),
+    servicio:document.getElementById("s-srv").value,
+    fecha:document.getElementById("s-fecha").value,
+    hora:document.getElementById("s-hora").value,
+    motivo:document.getElementById("s-motivo").value.trim(),
+    estado:"Pendiente",fechaSolicitud:new Date().toISOString().slice(0,10)};
+  var ok=false;
+  if(CFG.scriptUrl){
+    try{var qs=new URLSearchParams({action:"addSolicitud",data:JSON.stringify(data)});var res=await fetch(CFG.scriptUrl+"?"+qs.toString());var r=await res.json();ok=r.ok;}catch(e){ok=false;}
   }
-
-  try {
-    var stored = JSON.parse(localStorage.getItem("sp_solicitudes")||"[]");
-    stored.unshift(data);
-    localStorage.setItem("sp_solicitudes", JSON.stringify(stored.slice(0,100)));
-    ok = true;
-  } catch(e){}
-
-  btn.disabled = false;
-  btn.querySelector("span:last-child").textContent = "Enviar solicitud";
-
-  if (ok){
+  try{var stored=JSON.parse(localStorage.getItem("sp_solicitudes")||"[]");stored.unshift(data);localStorage.setItem("sp_solicitudes",JSON.stringify(stored.slice(0,100)));ok=true;}catch(e){}
+  btn.disabled=false;btn.querySelector("span:last-child").textContent="Enviar solicitud";
+  if(ok){
     document.getElementById("sol-ok").classList.add("on");
-    ["s-nombre","s-tel","s-email","s-motivo"].forEach(function(id){ document.getElementById(id).value=""; });
-    document.getElementById("s-srv").value="";
-    document.getElementById("s-fecha").value="";
-    toast("✅ Solicitud enviada correctamente","ok");
-  } else {
-    toast("Error al enviar. Intenta de nuevo o llama directamente.","err");
+    ["s-nombre","s-tel","s-email","s-motivo"].forEach(function(id){document.getElementById(id).value="";});
+    document.getElementById("s-srv").value="";document.getElementById("s-fecha").value="";
+    toast("✅ Solicitud enviada","ok");
+  }else{
+    toast("Error al enviar. Intenta de nuevo.","err");
   }
 }
 
 // ── HELPERS ──
-function scrollTo(id){ var el=document.getElementById(id); if(el) el.scrollIntoView({behavior:"smooth"}); }
-function esc(s){ return String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
-
+function scrollTo(id){var el=document.getElementById(id);if(el)el.scrollIntoView({behavior:"smooth"});}
+function esc(s){return String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
 var _tt;
 function toast(msg,type){
   var t=document.getElementById("toast");
-  t.textContent=msg; t.className="on "+(type||"");
-  clearTimeout(_tt); _tt=setTimeout(function(){ t.classList.remove("on"); },3500);
+  t.textContent=msg;t.className="on "+(type||"");
+  clearTimeout(_tt);_tt=setTimeout(function(){t.classList.remove("on");},3500);
 }
 
+// ── Cerrar modal con Escape ──
+document.addEventListener("keydown",function(e){
+  if(e.key==="Escape") closeSrvModal();
+});
+
 // ── INIT ──
-window.addEventListener("DOMContentLoaded", function(){
+window.addEventListener("DOMContentLoaded",function(){
   loadConfig();
   renderPage();
-  document.getElementById("s-fecha").min = new Date().toISOString().slice(0,10);
+  document.getElementById("s-fecha").min=new Date().toISOString().slice(0,10);
   setTimeout(function(){
     document.getElementById("loader").classList.add("hide");
-  }, 600);
+  },600);
 });
 </script>
 </body>
