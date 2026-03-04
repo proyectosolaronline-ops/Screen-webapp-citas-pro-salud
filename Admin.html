@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+<title>Admin — SaludPro</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --p:#1A7FC1;--p2:#38BDF8;
+  --bg:#080D14;--bg2:#0D1520;
+  --card:#111D2B;--card2:#162233;
+  --border:#1E3045;
+  --txt:#E8F0F8;--txt2:#7A9BB8;--txt3:#4A6A85;
+  --ok:#16A34A;--warn:#D97706;--err:#DC2626;
+  --ff:'DM Sans',sans-serif;--fm:'DM Mono',monospace;
+  --r:12px;--rs:8px;
+}
+[data-theme=light]{--bg:#F0F4F8;--bg2:#E4ECF4;--card:#fff;--card2:#F8FAFC;--border:#D1DDE8;--txt:#0D1520;--txt2:#4A6A85;--txt3:#8AAABF;}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;font-family:var(--ff);background:var(--bg);color:var(--txt);overflow-x:hidden}
+button{font-family:var(--ff);cursor:pointer;border:none;outline:none}
+input,select,textarea{font-family:var(--ff);outline:none}
+
+/* SPLASH */
+#splash{position:fixed;inset:0;background:var(--bg);z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;transition:opacity .5s}
+#splash.hide{opacity:0;pointer-events:none}
+.sp-logo{font-size:40px;font-weight:700;color:var(--p);letter-spacing:-2px}
+.sp-logo span{color:var(--p2)}
+.sp-sub{color:var(--txt2);font-size:12px;letter-spacing:2px;text-transform:uppercase}
+.sp-bar{width:160px;height:3px;background:var(--border);border-radius:99px;overflow:hidden;margin-top:8px}
+.sp-fill{height:100%;background:linear-gradient(90deg,var(--p),var(--p2));animation:spfill 1.4s ease-out forwards}
+@keyframes spfill{from{width:0}to{width:100%}}
+
+/* LOGIN ADMIN */
+#login{position:fixed;inset:0;background:var(--bg);z-index:100;display:none;align-items:center;justify-content:center;padding:20px}
+#login.on{display:flex}
+.lcard{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:36px;width:100%;max-width:380px;box-shadow:0 8px 40px rgba(0,0,0,.5)}
+.l-logo{font-size:24px;font-weight:700;color:var(--p);letter-spacing:-.5px;margin-bottom:2px}
+.l-logo span{color:var(--p2)}
+.l-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(220,38,38,.1);border:1px solid rgba(220,38,38,.25);color:#FCA5A5;padding:3px 11px;border-radius:99px;font-size:11px;font-weight:700;letter-spacing:.5px;margin-bottom:16px}
+.l-sub{color:var(--txt2);font-size:12px;margin-bottom:24px}
+.banner{background:rgba(220,38,38,.1);border:1px solid rgba(220,38,38,.3);color:#FCA5A5;padding:10px 14px;border-radius:var(--rs);font-size:13px;margin-bottom:14px;display:none}
+.banner.on{display:block}
+.field{margin-bottom:14px}
+.field label{display:block;font-size:11px;font-weight:700;color:var(--txt2);letter-spacing:.5px;text-transform:uppercase;margin-bottom:6px}
+.field input,.field select,.field textarea{width:100%;background:var(--bg2);border:1px solid var(--border);color:var(--txt);padding:10px 13px;border-radius:var(--rs);font-size:14px;transition:.2s}
+.field input:focus,.field select:focus{border-color:var(--p);box-shadow:0 0 0 3px rgba(26,127,193,.15)}
+.field .hint{font-size:11px;color:var(--txt3);margin-top:4px}
+.btn{width:100%;background:var(--p);color:#fff;padding:12px;border-radius:var(--rs);font-size:15px;font-weight:600;transition:.2s;margin-top:4px}
+.btn:hover{background:#1570A8;transform:translateY(-1px)}
+.btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.btn-sec{background:var(--card2);color:var(--txt2);border:1px solid var(--border)}
+.btn-sec:hover{background:var(--border);transform:none}
+.btn-danger{background:rgba(220,38,38,.1);color:#FCA5A5;border:1px solid rgba(220,38,38,.3)}
+
+/* APP */
+#app{display:none;min-height:100vh;flex-direction:column}
+#app.on{display:flex}
+
+/* TOPBAR */
+.topbar{position:sticky;top:0;z-index:50;height:54px;background:var(--card);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 16px;gap:10px}
+.tb-logo{font-size:16px;font-weight:700;color:var(--p)}
+.tb-logo span{color:var(--p2)}
+.tb-badge{display:inline-flex;align-items:center;gap:5px;background:rgba(220,38,38,.12);border:1px solid rgba(220,38,38,.25);color:#FCA5A5;padding:2px 9px;border-radius:99px;font-size:11px;font-weight:700}
+.tb-right{margin-left:auto;display:flex;gap:6px}
+.ib{width:34px;height:34px;border-radius:var(--rs);background:transparent;display:flex;align-items:center;justify-content:center;color:var(--txt2);font-size:17px;transition:.15s}
+.ib:hover{background:var(--card2);color:var(--txt)}
+
+/* CONTENIDO */
+.content{flex:1;padding:16px;max-width:600px;margin:0 auto;width:100%}
+
+/* SECCIONES */
+.sec{background:var(--card);border:1px solid var(--border);border-radius:var(--r);margin-bottom:16px;overflow:hidden}
+.sec-hdr{padding:14px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}
+.sec-icon{font-size:18px}
+.sec-title{font-size:14px;font-weight:700;color:var(--txt)}
+.sec-sub{font-size:11px;color:var(--txt2);margin-top:1px}
+.sec-body{padding:16px}
+
+/* CAMPO INLINE */
+.ifield{margin-bottom:12px}
+.ifield label{display:block;font-size:11px;font-weight:700;color:var(--txt3);letter-spacing:.5px;text-transform:uppercase;margin-bottom:5px}
+.ifield input,.ifield select{width:100%;background:var(--bg2);border:1px solid var(--border);color:var(--txt);padding:9px 12px;border-radius:var(--rs);font-size:14px;transition:.2s}
+.ifield input:focus,.ifield select:focus{border-color:var(--p);box-shadow:0 0 0 3px rgba(26,127,193,.15)}
+.ifield .hint{font-size:11px;color:var(--txt3);margin-top:4px}
+
+/* ROW */
+.irow{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+
+/* BOTÓN PEQUEÑO */
+.btn-sm{padding:8px 14px;border-radius:var(--rs);font-size:13px;font-weight:600;background:var(--p);color:#fff;border:none;cursor:pointer;transition:.15s}
+.btn-sm:hover{background:#1570A8}
+.btn-sm.sec{background:var(--card2);color:var(--txt2);border:1px solid var(--border)}
+.btn-sm.sec:hover{background:var(--border)}
+.btn-sm.danger{background:rgba(220,38,38,.1);color:#FCA5A5;border:1px solid rgba(220,38,38,.3)}
+
+/* ESTADO LICENCIA */
+.lic-status{display:flex;align-items:center;gap:10px;padding:13px 14px;background:var(--bg2);border-radius:var(--rs);margin-bottom:14px;border:1px solid var(--border)}
+.lic-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.lic-dot.activa{background:var(--ok);box-shadow:0 0 8px rgba(22,163,74,.5)}
+.lic-dot.inactiva{background:var(--txt3)}
+.lic-dot.expirada{background:var(--err);box-shadow:0 0 8px rgba(220,38,38,.4)}
+.lic-txt{flex:1}
+.lic-label{font-size:13px;font-weight:700}
+.lic-label.activa{color:#4ADE80}
+.lic-label.inactiva{color:var(--txt2)}
+.lic-label.expirada{color:#FCA5A5}
+.lic-info{font-size:11px;color:var(--txt3);margin-top:2px}
+.lic-token{font-family:var(--fm);font-size:10px;color:var(--txt3);margin-top:4px;word-break:break-all}
+
+/* TABLA PROPIETARIO */
+.prop-row{display:flex;align-items:center;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--border);font-size:13px}
+.prop-row:last-child{border:none}
+.prop-lbl{color:var(--txt2);font-weight:500}
+.prop-val{color:var(--txt);font-weight:600;text-align:right;max-width:60%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-family:var(--fm);font-size:12px}
+
+/* LINKS NAVEGACIÓN */
+.nav-links{display:flex;flex-direction:column;gap:8px}
+.nav-link{display:flex;align-items:center;gap:12px;padding:12px 14px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--rs);cursor:pointer;text-decoration:none;transition:.15s}
+.nav-link:hover{border-color:rgba(26,127,193,.4);background:var(--card2)}
+.nav-link-ico{font-size:20px;width:36px;text-align:center}
+.nav-link-body{flex:1}
+.nav-link-name{font-size:14px;font-weight:600;color:var(--txt)}
+.nav-link-desc{font-size:12px;color:var(--txt2);margin-top:1px}
+.nav-link-arr{color:var(--txt3);font-size:18px}
+
+/* TOAST */
+#toast{position:fixed;top:64px;left:50%;transform:translateX(-50%) translateY(-80px);background:var(--card);border:1px solid var(--border);color:var(--txt);padding:9px 18px;border-radius:var(--r);font-size:13px;font-weight:500;z-index:9000;transition:transform .3s ease;white-space:nowrap;box-shadow:0 4px 20px rgba(0,0,0,.4)}
+#toast.on{transform:translateX(-50%) translateY(0)}
+#toast.ok{border-color:rgba(22,163,74,.4);color:#4ADE80}
+#toast.err{border-color:rgba(220,38,38,.4);color:#FCA5A5}
+
+::-webkit-scrollbar{width:3px}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:99px}
+</style>
+</head>
+<body>
+
+<!-- SPLASH -->
+<div id="splash">
+  <div class="sp-logo">Salud<span>Pro</span></div>
+  <div class="sp-sub">Panel de Administración</div>
+  <div class="sp-bar"><div class="sp-fill"></div></div>
+</div>
+
+<!-- LOGIN -->
+<div id="login">
+  <div class="lcard">
+    <div class="l-logo">Salud<span>Pro</span> <span style="font-size:13px;color:var(--txt3);font-weight:400">Admin</span></div>
+    <div class="l-badge">🔐 ACCESO RESTRINGIDO</div>
+    <div class="l-sub">Panel privado de configuración y licencias</div>
+    <div class="banner" id="banner"></div>
+    <div class="field">
+      <label>Contraseña admin</label>
+      <input type="password" id="f-pass" placeholder="••••••••" autocomplete="current-password"/>
+      <div class="hint">Si es la primera vez, usa la contraseña configurada en la licencia.</div>
+    </div>
+    <button class="btn" id="btn-login" onclick="doLogin()">🔐 Acceder al panel</button>
+    <div style="margin-top:14px;text-align:center">
+      <a href="index.html" style="color:var(--txt3);font-size:12px">← Volver al inicio</a>
+    </div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app">
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div class="tb-logo">Salud<span>Pro</span></div>
+    <div class="tb-badge">🔐 Admin</div>
+    <div class="tb-right">
+      <button class="ib" onclick="toggleTheme()" title="Tema">🌓</button>
+      <button class="ib" onclick="doLogout()" title="Salir">🚪</button>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- NAVEGACIÓN RÁPIDA -->
+    <div class="sec">
+      <div class="sec-hdr">
+        <span class="sec-icon">🚀</span>
+        <div>
+          <div class="sec-title">Acceso Rápido</div>
+          <div class="sec-sub">Navegar entre pantallas del sistema</div>
+        </div>
+      </div>
+      <div class="sec-body">
+        <div class="nav-links">
+          <a class="nav-link" href="index.html">
+            <span class="nav-link-ico">🌐</span>
+            <div class="nav-link-body">
+              <div class="nav-link-name">Landing Pública</div>
+              <div class="nav-link-desc">Página de presentación del consultorio</div>
+            </div>
+            <span class="nav-link-arr">›</span>
+          </a>
+          <a class="nav-link" href="citas-pro-salud.html">
+            <span class="nav-link-ico">📋</span>
+            <div class="nav-link-body">
+              <div class="nav-link-name">App de Gestión</div>
+              <div class="nav-link-desc">Citas, pacientes, pagos e inventario</div>
+            </div>
+            <span class="nav-link-arr">›</span>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- LICENCIA -->
+    <div class="sec">
+      <div class="sec-hdr">
+        <span class="sec-icon">🔑</span>
+        <div>
+          <div class="sec-title">Licencia del Sistema</div>
+          <div class="sec-sub">Estado y datos de activación — compartido con todas las pantallas</div>
+        </div>
+      </div>
+      <div class="sec-body">
+
+        <!-- Estado actual -->
+        <div class="lic-status">
+          <div class="lic-dot" id="lic-dot"></div>
+          <div class="lic-txt">
+            <div class="lic-label" id="lic-label">—</div>
+            <div class="lic-info" id="lic-info">Sin información de licencia</div>
+            <div class="lic-token" id="lic-token"></div>
+          </div>
+        </div>
+
+        <div class="irow">
+          <div class="ifield">
+            <label>Estado</label>
+            <select id="lic-estado" onchange="saveLicenseField('estado',this.value);renderLicStatus()">
+              <option value="activa">✅ Activa</option>
+              <option value="inactiva">⬜ Inactiva</option>
+              <option value="expirada">❌ Expirada</option>
+            </select>
+          </div>
+          <div class="ifield">
+            <label>Fecha de expiración</label>
+            <input type="date" id="lic-expira" onchange="saveLicenseField('expira',this.value)"/>
+          </div>
+        </div>
+
+        <div class="ifield">
+          <label>Token / Clave de licencia</label>
+          <input type="text" id="lic-token-input" placeholder="SP-XXXX-XXXX-XXXX" oninput="saveLicenseField('token',this.value)" style="font-family:var(--fm)"/>
+          <div class="hint">Clave única de activación. Compartida entre todas las pantallas del sistema.</div>
+        </div>
+
+        <button class="btn-sm" onclick="genToken()" style="margin-bottom:8px">🎲 Generar token aleatorio</button>
+      </div>
+    </div>
+
+    <!-- DATOS DEL PROPIETARIO -->
+    <div class="sec">
+      <div class="sec-hdr">
+        <span class="sec-icon">👤</span>
+        <div>
+          <div class="sec-title">Datos del Propietario</div>
+          <div class="sec-sub">Información del titular de la licencia</div>
+        </div>
+      </div>
+      <div class="sec-body">
+        <div class="ifield">
+          <label>Nombre del propietario</label>
+          <input type="text" id="prop-nombre" placeholder="Dr. Juan García López" oninput="saveLicenseField('propietario',this.value)"/>
+        </div>
+        <div class="irow">
+          <div class="ifield">
+            <label>Email del titular</label>
+            <input type="email" id="prop-email" placeholder="titular@correo.com" oninput="saveLicenseField('propEmail',this.value)"/>
+          </div>
+          <div class="ifield">
+            <label>Teléfono de contacto</label>
+            <input type="tel" id="prop-tel" placeholder="+52 555 000 0000" oninput="saveLicenseField('propTel',this.value)"/>
+          </div>
+        </div>
+        <div class="ifield">
+          <label>Nombre del consultorio</label>
+          <input type="text" id="prop-consultorio" placeholder="Consultorio Dr. García" oninput="saveLicensePropAndCfg('propConsultorio','perfil.nombre',this.value)"/>
+          <div class="hint">Este nombre se sincroniza automáticamente con la landing y la app de gestión.</div>
+        </div>
+        <div class="ifield">
+          <label>Plan / Tipo de licencia</label>
+          <select id="prop-plan" onchange="saveLicenseField('plan',this.value)">
+            <option value="basico">Básico</option>
+            <option value="profesional">Profesional</option>
+            <option value="enterprise">Enterprise</option>
+          </select>
+        </div>
+
+        <!-- Resumen -->
+        <div style="margin-top:14px;padding:12px;background:var(--bg2);border-radius:var(--rs);border:1px solid var(--border)">
+          <div style="font-size:11px;font-weight:700;color:var(--txt3);letter-spacing:.5px;text-transform:uppercase;margin-bottom:10px">Resumen actual</div>
+          <div id="prop-summary"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ACCESO AL SISTEMA -->
+    <div class="sec">
+      <div class="sec-hdr">
+        <span class="sec-icon">🛡️</span>
+        <div>
+          <div class="sec-title">Control de Acceso</div>
+          <div class="sec-sub">Contraseñas y seguridad del sistema</div>
+        </div>
+      </div>
+      <div class="sec-body">
+        <div class="ifield">
+          <label>Contraseña panel admin (esta pantalla)</label>
+          <input type="password" id="sec-admin-pass" placeholder="Nueva contraseña admin" autocomplete="new-password"/>
+          <div class="hint">Protege el acceso a este panel. Se solicita desde la app de gestión al presionar 🔐.</div>
+        </div>
+        <div class="ifield">
+          <label>URL del Google Apps Script</label>
+          <input type="url" id="sec-script-url" placeholder="https://script.google.com/macros/s/.../exec" oninput="saveScriptUrl(this.value)" style="font-size:12px"/>
+          <div class="hint">URL compartida con la landing y la app de gestión. Cambiarla aquí afecta a todas las pantallas.</div>
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:4px">
+          <button class="btn-sm" onclick="saveAdminPass()">💾 Guardar contraseña</button>
+          <button class="btn-sm sec" onclick="testConnection()">🔗 Probar conexión</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- SINCRONIZACIÓN -->
+    <div class="sec">
+      <div class="sec-hdr">
+        <span class="sec-icon">🔄</span>
+        <div>
+          <div class="sec-title">Sincronización</div>
+          <div class="sec-sub">Estado de los datos compartidos entre pantallas</div>
+        </div>
+      </div>
+      <div class="sec-body">
+        <div id="sync-status"></div>
+        <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">
+          <button class="btn-sm" onclick="renderSyncStatus()">🔄 Actualizar</button>
+          <button class="btn-sm sec" onclick="exportConfig()">📤 Exportar config</button>
+          <button class="btn-sm sec" onclick="importConfig()">📥 Importar config</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- PELIGRO -->
+    <div class="sec" style="border-color:rgba(220,38,38,.3)">
+      <div class="sec-hdr" style="border-bottom-color:rgba(220,38,38,.2)">
+        <span class="sec-icon">⚠️</span>
+        <div>
+          <div class="sec-title" style="color:#FCA5A5">Zona de Peligro</div>
+          <div class="sec-sub">Acciones irreversibles</div>
+        </div>
+      </div>
+      <div class="sec-body">
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button class="btn-sm danger" onclick="resetLicense()">🗑 Borrar licencia</button>
+          <button class="btn-sm danger" onclick="resetAllConfig()">💥 Reset total</button>
+        </div>
+        <div style="font-size:11px;color:var(--txt3);margin-top:8px">Estas acciones eliminan datos del localStorage. No afectan Google Sheets.</div>
+      </div>
+    </div>
+
+    <!-- FOOTER -->
+    <div style="text-align:center;padding:20px 0 32px;color:var(--txt3);font-size:12px">
+      SaludPro Admin Panel · <span id="footer-version">v1.0</span><br/>
+      <span id="footer-prop" style="font-size:11px"></span>
+    </div>
+
+  </div><!-- /content -->
+</div><!-- /app -->
+
+<div id="toast"></div>
+
+<script>
+// ══════════════════════════════════════════════
+//  LICENCIA — clave compartida "sp_license"
+//  Usada también por index.html y citas-pro-salud.html
+// ══════════════════════════════════════════════
+var LICENSE = {
+  propietario:"", token:"", estado:"inactiva", expira:"",
+  adminPass:"", propEmail:"", propTel:"", propConsultorio:"",
+  plan:"basico"
+};
+
+// ── LocalStorage helpers ──────────────────────
+function lsGet(k){ try{ return JSON.parse(localStorage.getItem(k)); }catch(e){ return null; } }
+function lsSet(k,v){ try{ localStorage.setItem(k,JSON.stringify(v)); }catch(e){} }
+
+function loadLicense(){
+  var lic = lsGet("sp_license") || {};
+  Object.assign(LICENSE, lic);
+}
+function saveLicense(){
+  lsSet("sp_license", LICENSE);
+}
+function saveLicenseField(field, val){
+  LICENSE[field] = val;
+  saveLicense();
+  renderPropSummary();
+}
+// Guarda simultáneamente en licencia Y en sp_cfg (compartido con citas-pro-salud e index)
+function saveLicensePropAndCfg(licField, cfgPath, val){
+  LICENSE[licField] = val;
+  saveLicense();
+  // Sincronizar con sp_cfg
+  var cfg = lsGet("sp_cfg") || {};
+  var keys = cfgPath.split(".");
+  var obj = cfg;
+  for(var i=0;i<keys.length-1;i++){ if(!obj[keys[i]]) obj[keys[i]]={}; obj=obj[keys[i]]; }
+  obj[keys[keys.length-1]] = val;
+  lsSet("sp_cfg", cfg);
+  renderPropSummary();
+}
+function saveScriptUrl(val){
+  val = (val||"").trim();
+  // Guardar en los 3 lugares donde se lee
+  localStorage.setItem("sp_url", val);
+  var cfg = lsGet("sp_cfg") || {};
+  cfg.url = val;
+  lsSet("sp_cfg", cfg);
+  LICENSE.scriptUrl = val;
+  saveLicense();
+}
+
+// ══════════════════════════════════════════════
+//  LOGIN
+// ══════════════════════════════════════════════
+var ADMIN_SESSION_KEY = "sp_admin_session";
+
+function doLogin(){
+  var input = document.getElementById("f-pass").value;
+  var storedPass = LICENSE.adminPass || "";
+
+  // Primera vez: si no hay contraseña configurada, crear sesión directamente
+  if(!storedPass){
+    startSession();
+    return;
+  }
+  if(input !== storedPass){
+    showBanner("❌ Contraseña incorrecta.");
+    return;
+  }
+  startSession();
+}
+
+function startSession(){
+  var session = { ts: Date.now(), exp: Date.now() + (4 * 60 * 60 * 1000) }; // 4 horas
+  lsSet(ADMIN_SESSION_KEY, session);
+  showApp();
+}
+
+function checkSession(){
+  var s = lsGet(ADMIN_SESSION_KEY);
+  if(s && s.exp && Date.now() < s.exp) return true;
+  return false;
+}
+
+function doLogout(){
+  if(!confirm("¿Cerrar sesión del panel admin?")) return;
+  lsSet(ADMIN_SESSION_KEY, null);
+  showLogin();
+}
+
+function showBanner(msg){ var b=document.getElementById("banner"); b.textContent=msg; b.classList.add("on"); }
+function showLogin(){ document.getElementById("app").classList.remove("on"); document.getElementById("login").classList.add("on"); }
+function showApp(){ document.getElementById("login").classList.remove("on"); document.getElementById("app").classList.add("on"); loadUI(); }
+
+// ══════════════════════════════════════════════
+//  INIT
+// ══════════════════════════════════════════════
+window.addEventListener("DOMContentLoaded", function(){
+  setTimeout(function(){
+    document.getElementById("splash").classList.add("hide");
+    setTimeout(function(){
+      loadLicense();
+      applyTheme();
+      if(checkSession()) showApp();
+      else showLogin();
+      // Enter en password
+      document.getElementById("f-pass").addEventListener("keydown", function(e){ if(e.key==="Enter") doLogin(); });
+    }, 500);
+  }, 1400);
+});
+
+// ══════════════════════════════════════════════
+//  CARGA DE UI
+// ══════════════════════════════════════════════
+function loadUI(){
+  // Licencia
+  document.getElementById("lic-estado").value      = LICENSE.estado || "inactiva";
+  document.getElementById("lic-token-input").value = LICENSE.token  || "";
+  document.getElementById("lic-expira").value       = LICENSE.expira || "";
+  renderLicStatus();
+
+  // Propietario
+  document.getElementById("prop-nombre").value      = LICENSE.propietario    || "";
+  document.getElementById("prop-email").value       = LICENSE.propEmail      || "";
+  document.getElementById("prop-tel").value         = LICENSE.propTel        || "";
+  document.getElementById("prop-consultorio").value = LICENSE.propConsultorio|| "";
+  document.getElementById("prop-plan").value        = LICENSE.plan           || "basico";
+  renderPropSummary();
+
+  // Acceso
+  document.getElementById("sec-admin-pass").value  = "";
+  // Leer URL de script desde los lugares compartidos
+  var url = LICENSE.scriptUrl || localStorage.getItem("sp_url") || "";
+  document.getElementById("sec-script-url").value = url;
+
+  // Sync
+  renderSyncStatus();
+
+  // Footer
+  document.getElementById("footer-prop").textContent = LICENSE.propietario ? "Propietario: "+LICENSE.propietario : "";
+}
+
+// ── Estado de licencia ────────────────────────
+function renderLicStatus(){
+  var e = LICENSE.estado || "inactiva";
+  var dot   = document.getElementById("lic-dot");
+  var label = document.getElementById("lic-label");
+  var info  = document.getElementById("lic-info");
+  var token = document.getElementById("lic-token");
+
+  dot.className   = "lic-dot "+e;
+  label.className = "lic-label "+e;
+  label.textContent = e==="activa"?"✅ Licencia Activa": e==="expirada"?"❌ Licencia Expirada":"⬜ Licencia Inactiva";
+
+  var infoTxt = "";
+  if(LICENSE.propietario) infoTxt += LICENSE.propietario;
+  if(LICENSE.plan)        infoTxt += " · Plan "+(LICENSE.plan.charAt(0).toUpperCase()+LICENSE.plan.slice(1));
+  if(LICENSE.expira)      infoTxt += " · Vence: "+LICENSE.expira;
+  info.textContent = infoTxt || "Sin información de propietario";
+
+  token.textContent = LICENSE.token ? "Token: "+LICENSE.token : "";
+}
+
+// ── Resumen propietario ───────────────────────
+function renderPropSummary(){
+  var el = document.getElementById("prop-summary");
+  var rows = [
+    ["Propietario", LICENSE.propietario],
+    ["Email",       LICENSE.propEmail],
+    ["Teléfono",    LICENSE.propTel],
+    ["Consultorio", LICENSE.propConsultorio],
+    ["Plan",        LICENSE.plan ? (LICENSE.plan.charAt(0).toUpperCase()+LICENSE.plan.slice(1)) : ""],
+    ["Token",       LICENSE.token],
+    ["Estado",      LICENSE.estado]
+  ];
+  el.innerHTML = rows.filter(function(r){ return r[1]; }).map(function(r){
+    return '<div class="prop-row"><span class="prop-lbl">'+r[0]+'</span><span class="prop-val">'+esc(r[1])+'</span></div>';
+  }).join("") || '<div style="color:var(--txt3);font-size:13px">Sin datos aún</div>';
+}
+
+// ── Sincronización ────────────────────────────
+function renderSyncStatus(){
+  var el = document.getElementById("sync-status");
+  var cfg = lsGet("sp_cfg") || {};
+  var lic = lsGet("sp_license") || {};
+  var url = localStorage.getItem("sp_url") || "";
+
+  var items = [
+    { label:"sp_license (licencia)", ok: !!lic.token || !!lic.propietario, val: lic.estado||"sin datos" },
+    { label:"sp_cfg.perfil.nombre",  ok: !!(cfg.perfil&&cfg.perfil.nombre), val: (cfg.perfil&&cfg.perfil.nombre)||"—" },
+    { label:"sp_cfg.url (Apps Script)", ok: !!(cfg.url||url), val: (cfg.url||url||"—").slice(0,40)+"…" },
+    { label:"sp_user (sesión app)",  ok: !!lsGet("sp_user"), val: lsGet("sp_user")?"Activa":"Sin sesión" },
+    { label:"sp_admin_session",      ok: checkSession(), val: checkSession()?"Activa (4h)":"Expirada" }
+  ];
+
+  el.innerHTML = items.map(function(i){
+    return '<div class="prop-row">'
+      +'<span class="prop-lbl">'+(i.ok?'<span style="color:var(--ok)">✓</span>':'<span style="color:var(--err)">✗</span>')+' '+i.label+'</span>'
+      +'<span class="prop-val" style="font-family:var(--fm);font-size:11px">'+esc(String(i.val))+'</span>'
+      +'</div>';
+  }).join("");
+}
+
+// ── Contraseña admin ──────────────────────────
+function saveAdminPass(){
+  var newPass = document.getElementById("sec-admin-pass").value;
+  if(!newPass){ toast("Escribe una contraseña","err"); return; }
+  if(newPass.length < 4){ toast("Mínimo 4 caracteres","err"); return; }
+  LICENSE.adminPass = newPass;
+  saveLicense();
+  document.getElementById("sec-admin-pass").value = "";
+  toast("✅ Contraseña guardada","ok");
+}
+
+// ── Conexión Apps Script ──────────────────────
+async function testConnection(){
+  var url = document.getElementById("sec-script-url").value.trim();
+  if(!url){ toast("Pega primero la URL del script","err"); return; }
+  toast("🔄 Probando conexión...");
+  try{
+    var qs = new URLSearchParams({action:"ping"});
+    var res = await fetch(url+"?"+qs.toString());
+    var r = await res.json();
+    if(r.ok) toast("✅ Conectado — v"+(r.version||"?"),"ok");
+    else     toast("❌ "+( r.error||"Error en el script"),"err");
+  }catch(e){
+    toast("❌ Sin conexión: "+e.message,"err");
+  }
+}
+
+// ── Token aleatorio ───────────────────────────
+function genToken(){
+  var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+  var seg = function(){ var s=""; for(var i=0;i<4;i++) s+=chars[Math.floor(Math.random()*chars.length)]; return s; };
+  var token = "SP-"+seg()+"-"+seg()+"-"+seg();
+  document.getElementById("lic-token-input").value = token;
+  saveLicenseField("token", token);
+  toast("🎲 Token generado","ok");
+}
+
+// ── Exportar / importar ───────────────────────
+function exportConfig(){
+  var data = {
+    license: lsGet("sp_license"),
+    cfg:     lsGet("sp_cfg"),
+    ts:      new Date().toISOString()
+  };
+  var blob = new Blob([JSON.stringify(data,null,2)], {type:"application/json"});
+  var url  = URL.createObjectURL(blob);
+  var a    = document.createElement("a");
+  a.href   = url;
+  a.download = "saludpro-config-"+new Date().toISOString().slice(0,10)+".json";
+  a.click();
+  URL.revokeObjectURL(url);
+  toast("📤 Config exportada","ok");
+}
+
+function importConfig(){
+  var input = document.createElement("input");
+  input.type = "file"; input.accept = ".json";
+  input.onchange = function(){
+    var file = input.files[0]; if(!file) return;
+    var reader = new FileReader();
+    reader.onload = function(e){
+      try{
+        var data = JSON.parse(e.target.result);
+        if(data.license) lsSet("sp_license", data.license);
+        if(data.cfg)     lsSet("sp_cfg",     data.cfg);
+        loadLicense();
+        loadUI();
+        toast("📥 Config importada","ok");
+      }catch(err){ toast("❌ Archivo inválido","err"); }
+    };
+    reader.readAsText(file);
+  };
+  input.click();
+}
+
+// ── Reset ─────────────────────────────────────
+function resetLicense(){
+  if(!confirm("¿Borrar todos los datos de licencia? Esta acción no puede deshacerse.")) return;
+  localStorage.removeItem("sp_license");
+  LICENSE = {propietario:"",token:"",estado:"inactiva",expira:"",adminPass:"",propEmail:"",propTel:"",propConsultorio:"",plan:"basico"};
+  loadUI();
+  toast("Licencia eliminada","ok");
+}
+
+function resetAllConfig(){
+  if(!confirm("⚠️ ¿Borrar TODA la configuración del sistema (licencia + sp_cfg + sesiones)?\n\nEsto NO borra datos de Google Sheets.")) return;
+  ["sp_license","sp_cfg","sp_user","sp_url","sp_admin_session","sp_solicitudes"].forEach(function(k){ localStorage.removeItem(k); });
+  toast("💥 Reset completo","ok");
+  setTimeout(function(){ window.location.reload(); }, 1500);
+}
+
+// ── Tema ──────────────────────────────────────
+function applyTheme(){
+  var cfg = lsGet("sp_cfg") || {};
+  var dark = cfg.tema ? cfg.tema.dark !== false : true;
+  document.documentElement.setAttribute("data-theme", dark ? "dark" : "light");
+}
+function toggleTheme(){
+  var current = document.documentElement.getAttribute("data-theme");
+  var newTheme = current === "dark" ? "light" : "dark";
+  document.documentElement.setAttribute("data-theme", newTheme);
+  var cfg = lsGet("sp_cfg") || {};
+  if(!cfg.tema) cfg.tema = {};
+  cfg.tema.dark = newTheme === "dark";
+  lsSet("sp_cfg", cfg);
+}
+
+// ── Helpers ───────────────────────────────────
+function esc(s){ return String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+var _tt;
+function toast(msg,type){
+  var t=document.getElementById("toast");
+  t.textContent=msg; t.className="on "+(type||"");
+  clearTimeout(_tt); _tt=setTimeout(function(){ t.classList.remove("on"); },3200);
+}
+</script>
+</body>
+</html>
