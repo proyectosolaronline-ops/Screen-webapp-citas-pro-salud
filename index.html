@@ -1,0 +1,1057 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+<title>SaludPro — Consultorio</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --teal:#0D9488;--teal-d:#0a7870;--teal-l:#ccfbf1;
+  --ink:#0f2027;--mist:#f0faf9;--slate:#475569;
+  --border:#d1faf4;--gold:#f59e0b;--red:#ef4444;--white:#fff;
+  --radius:16px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{font-family:'DM Sans',sans-serif;background:var(--mist);color:var(--ink);min-height:100vh;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;z-index:-1;
+  background:radial-gradient(ellipse 80% 60% at 10% 0%,rgba(13,148,136,.12) 0%,transparent 60%),
+             radial-gradient(ellipse 60% 50% at 90% 100%,rgba(13,148,136,.08) 0%,transparent 55%),var(--mist);}
+
+/* ── HEADER ── */
+header{display:flex;align-items:center;justify-content:space-between;padding:14px 24px;background:rgba(255,255,255,.85);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:200;}
+.logo{font-family:'DM Serif Display',serif;font-size:20px;color:var(--teal);letter-spacing:-.5px}
+.header-right{display:flex;align-items:center;gap:10px}
+.lic-badge{font-size:11px;font-weight:600;letter-spacing:1px;color:var(--slate);text-transform:uppercase;background:var(--teal-l);border:1px solid var(--border);padding:4px 12px;border-radius:99px}
+#btn-medico-login{background:none;border:none;cursor:pointer;font-size:18px;padding:4px 8px;border-radius:8px;color:var(--slate);transition:.2s;opacity:.5}
+#btn-medico-login:hover{opacity:1;background:var(--teal-l)}
+
+/* ── VISTA PÚBLICA ── */
+#vista-publica{display:block}
+.hero{max-width:760px;margin:0 auto;padding:48px 24px 0;text-align:center;animation:fadeUp .6s ease both}
+.sello{display:inline-flex;align-items:center;gap:8px;background:var(--white);border:1.5px solid var(--teal);border-radius:99px;padding:6px 18px 6px 10px;font-size:12px;font-weight:600;color:var(--teal);box-shadow:0 2px 12px rgba(13,148,136,.15);margin-bottom:24px}
+.avatar-wrap{position:relative;display:inline-block;margin-bottom:16px}
+.avatar{width:90px;height:90px;border-radius:50%;background:linear-gradient(135deg,var(--teal) 0%,var(--teal-d) 100%);display:flex;align-items:center;justify-content:center;font-family:'DM Serif Display',serif;font-size:34px;color:#fff;box-shadow:0 8px 32px rgba(13,148,136,.3);border:4px solid white}
+.avatar-ring{position:absolute;inset:-6px;border-radius:50%;border:2px dashed rgba(13,148,136,.35);animation:spin 18s linear infinite}
+h1{font-family:'DM Serif Display',serif;font-size:clamp(24px,5vw,36px);line-height:1.15;color:var(--ink);margin-bottom:8px}
+.esp-tag{display:inline-block;background:var(--teal-l);color:var(--teal);font-size:13px;font-weight:600;padding:4px 14px;border-radius:99px;margin-bottom:12px}
+.cedula-line{font-size:13px;color:var(--slate);margin-bottom:4px}
+.cedula-line span{font-weight:600;color:var(--ink)}
+.cards{max-width:760px;margin:36px auto 0;padding:0 24px;display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;animation:fadeUp .7s .15s ease both}
+.card{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);padding:18px;display:flex;gap:12px;align-items:flex-start;box-shadow:0 2px 10px rgba(13,148,136,.06);transition:transform .2s,box-shadow .2s}
+.card:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(13,148,136,.12)}
+.card-icon{width:38px;height:38px;border-radius:10px;background:var(--teal-l);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.card-icon svg{width:19px;height:19px;color:var(--teal)}
+.card-label{font-size:11px;font-weight:600;color:var(--slate);text-transform:uppercase;letter-spacing:.8px;margin-bottom:3px}
+.card-value{font-size:13px;font-weight:500;color:var(--ink);line-height:1.4}
+.section-title{max-width:760px;margin:44px auto 18px;padding:0 24px;font-family:'DM Serif Display',serif;font-size:22px;color:var(--ink);animation:fadeUp .7s .25s ease both}
+.form-wrap{max-width:760px;margin:0 auto 50px;padding:0 24px;animation:fadeUp .7s .3s ease both}
+.form-card{background:var(--white);border:1px solid var(--border);border-radius:20px;padding:28px;box-shadow:0 4px 24px rgba(13,148,136,.08)}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:520px){.form-grid{grid-template-columns:1fr}}
+.field{display:flex;flex-direction:column;gap:5px}
+.field.full{grid-column:1/-1}
+label{font-size:11px;font-weight:600;color:var(--slate);text-transform:uppercase;letter-spacing:.7px}
+input,select,textarea{font-family:'DM Sans',sans-serif;font-size:14px;padding:10px 13px;border:1.5px solid #e2e8f0;border-radius:10px;background:#fafcff;color:var(--ink);transition:border-color .2s,box-shadow .2s;outline:none;width:100%}
+input:focus,select:focus,textarea:focus{border-color:var(--teal);box-shadow:0 0 0 3px rgba(13,148,136,.12);background:var(--white)}
+textarea{resize:vertical;min-height:80px}
+.btn-submit{margin-top:16px;width:100%;padding:13px;background:var(--teal);color:var(--white);border:none;border-radius:12px;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:600;cursor:pointer;transition:background .2s,transform .15s,box-shadow .2s;box-shadow:0 4px 14px rgba(13,148,136,.35);display:flex;align-items:center;justify-content:center;gap:8px}
+.btn-submit:hover{background:var(--teal-d);transform:translateY(-1px);box-shadow:0 6px 20px rgba(13,148,136,.4)}
+.btn-submit:disabled{opacity:.6;cursor:not-allowed;transform:none}
+.confirm-card{display:none;background:linear-gradient(135deg,var(--teal) 0%,var(--teal-d) 100%);border-radius:20px;padding:32px;text-align:center;color:var(--white);box-shadow:0 8px 32px rgba(13,148,136,.4);animation:popIn .5s cubic-bezier(.34,1.56,.64,1) both}
+.confirm-card .check{width:60px;height:60px;border-radius:50%;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;margin:0 auto 16px;font-size:28px}
+.confirm-card h3{font-family:'DM Serif Display',serif;font-size:22px;margin-bottom:8px}
+.confirm-card p{font-size:13px;opacity:.88;line-height:1.7}
+.folio-box{display:inline-block;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);border-radius:10px;padding:8px 18px;margin-top:14px;font-size:13px;font-weight:600;letter-spacing:1px}
+.tracking-section{max-width:760px;margin:0 auto 40px;padding:0 24px;animation:fadeUp .7s .35s ease both}
+.tracking-input-wrap{display:flex;gap:10px}
+.tracking-input-wrap input{flex:1}
+.btn-track{padding:10px 18px;background:var(--teal-l);color:var(--teal);border:1.5px solid var(--border);border-radius:10px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;cursor:pointer;white-space:nowrap;transition:background .2s}
+.btn-track:hover{background:#b2f5ea}
+.tracking-result{margin-top:14px;display:none;border:1.5px solid var(--border);border-radius:14px;overflow:hidden;background:var(--white)}
+.tr-header{padding:14px 18px;display:flex;align-items:center;gap:10px}
+.tr-dot{width:11px;height:11px;border-radius:50%;flex-shrink:0}
+.dot-pending{background:var(--gold);box-shadow:0 0 0 4px rgba(245,158,11,.15)}
+.dot-confirmed{background:var(--teal);box-shadow:0 0 0 4px rgba(13,148,136,.15)}
+.dot-cancelled{background:var(--red);box-shadow:0 0 0 4px rgba(239,68,68,.15)}
+.tr-body{padding:0 18px 18px;display:grid;gap:5px}
+.tr-row{display:flex;gap:8px;font-size:13px}
+.tr-row strong{color:var(--slate);min-width:90px}
+footer{text-align:center;padding:24px;font-size:12px;color:var(--slate);border-top:1px solid var(--border)}
+
+/* ── QR + COMPARTIR ── */
+.qr-section{max-width:760px;margin:0 auto 40px;padding:0 24px;animation:fadeUp .7s .4s ease both}
+.qr-card{background:var(--white);border:1px solid var(--border);border-radius:20px;padding:24px 28px;box-shadow:0 4px 24px rgba(13,148,136,.08);display:flex;gap:24px;align-items:center;flex-wrap:wrap}
+.qr-left{flex:1;min-width:200px}
+.qr-title{font-family:'DM Serif Display',serif;font-size:17px;color:var(--ink);margin-bottom:4px}
+.qr-sub{font-size:13px;color:var(--slate);margin-bottom:14px;line-height:1.5}
+.qr-url-box{font-size:11px;color:var(--teal);word-break:break-all;background:var(--teal-l);padding:7px 11px;border-radius:8px;margin-bottom:14px;font-weight:600;font-family:monospace}
+.qr-btns{display:flex;gap:8px;flex-wrap:wrap}
+.btn-qr{padding:8px 14px;border-radius:9px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;border:none;transition:.15s;display:inline-flex;align-items:center;gap:6px}
+.btn-qr-copy{background:var(--teal-l);color:var(--teal);border:1px solid var(--border)}
+.btn-qr-copy:hover{background:#b2f5ea}
+.btn-qr-wa{background:#dcfce7;color:#166534;border:1px solid #bbf7d0}
+.btn-qr-wa:hover{background:#bbf7d0}
+.btn-qr-mail{background:#e0f2fe;color:#075985;border:1px solid #bae6fd}
+.btn-qr-mail:hover{background:#bae6fd}
+.qr-right{display:flex;flex-direction:column;align-items:center;gap:8px}
+#qr-canvas{border-radius:12px;border:3px solid var(--teal-l)}
+.qr-hint{font-size:11px;color:var(--slate);text-align:center}
+/* ── MAPA EMERGENTE ── */
+#modal-mapa{display:none;position:fixed;inset:0;background:rgba(15,32,39,.7);backdrop-filter:blur(6px);z-index:500;align-items:flex-end;justify-content:center;padding:0}
+#modal-mapa.on{display:flex}
+.mapa-sheet{background:#fff;border-radius:20px 20px 0 0;padding:20px 20px 32px;width:100%;max-width:540px;animation:slideUp .3s ease}
+.mapa-title{font-family:'DM Serif Display',serif;font-size:17px;color:var(--ink);margin-bottom:4px}
+.mapa-dir{font-size:13px;color:var(--slate);margin-bottom:14px}
+.mapa-frame{width:100%;height:220px;border-radius:12px;border:1.5px solid var(--border);overflow:hidden;margin-bottom:14px}
+.mapa-frame iframe{width:100%;height:100%;border:none}
+.mapa-btns{display:flex;gap:10px}
+.btn-maps{flex:1;padding:11px;background:var(--teal);color:#fff;border:none;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;cursor:pointer;transition:.2s}
+.btn-maps:hover{background:var(--teal-d)}
+.btn-cerrar-mapa{padding:11px 18px;background:none;border:1.5px solid #e2e8f0;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--slate);cursor:pointer}
+/* ── PANEL MÉDICO ── */
+#vista-medico{display:none}
+#vista-medico.on{display:block}
+
+/* LOGIN MÉDICO */
+#modal-login{display:none;position:fixed;inset:0;background:rgba(15,32,39,.7);backdrop-filter:blur(6px);z-index:300;align-items:center;justify-content:center;padding:20px}
+#modal-login.on{display:flex}
+.login-card{background:#fff;border-radius:20px;padding:32px;width:100%;max-width:360px;box-shadow:0 16px 64px rgba(0,0,0,.2)}
+.login-card h2{font-family:'DM Serif Display',serif;font-size:22px;color:var(--teal);margin-bottom:4px}
+.login-card p{font-size:13px;color:var(--slate);margin-bottom:22px}
+.login-err{display:none;background:#fef2f2;border:1px solid #fecaca;color:var(--red);padding:9px 12px;border-radius:9px;font-size:13px;margin-bottom:14px}
+.login-err.on{display:block}
+.login-field{margin-bottom:12px}
+.login-field label{display:block;font-size:11px;font-weight:600;color:var(--slate);text-transform:uppercase;letter-spacing:.6px;margin-bottom:5px}
+.login-field input{width:100%;padding:10px 13px;border:1.5px solid #e2e8f0;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:14px;outline:none;transition:.2s}
+.login-field input:focus{border-color:var(--teal);box-shadow:0 0 0 3px rgba(13,148,136,.12)}
+.btn-login{width:100%;padding:12px;background:var(--teal);color:#fff;border:none;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:600;cursor:pointer;margin-top:4px;transition:.2s}
+.btn-login:hover{background:var(--teal-d)}
+.btn-cancel-login{width:100%;padding:10px;background:none;border:1.5px solid #e2e8f0;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--slate);cursor:pointer;margin-top:8px}
+
+/* PANEL TOPBAR */
+.panel-bar{background:var(--teal);color:#fff;padding:12px 24px;display:flex;align-items:center;justify-content:space-between}
+.panel-bar-name{font-size:14px;font-weight:600}
+.panel-bar-right{display:flex;gap:8px}
+.btn-logout{background:rgba(255,255,255,.2);border:none;color:#fff;padding:6px 14px;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:.2s}
+.btn-logout:hover{background:rgba(255,255,255,.35)}
+
+/* TABS */
+.tabs{background:#fff;border-bottom:2px solid var(--border);display:flex;overflow-x:auto;-webkit-overflow-scrolling:touch;position:sticky;top:49px;z-index:100}
+.tab{flex:1;min-width:80px;padding:13px 8px;text-align:center;font-size:13px;font-weight:600;color:var(--slate);cursor:pointer;border-bottom:3px solid transparent;transition:.2s;white-space:nowrap;background:none;border-top:none;border-left:none;border-right:none}
+.tab.active{color:var(--teal);border-bottom-color:var(--teal)}
+.tab-body{display:none;max-width:800px;margin:0 auto;padding:20px 16px}
+.tab-body.active{display:block}
+
+/* TARJETAS CITA */
+.cita-card{background:#fff;border:1.5px solid var(--border);border-radius:14px;padding:16px;margin-bottom:12px;box-shadow:0 2px 8px rgba(13,148,136,.05)}
+.cita-top{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:10px}
+.cita-paciente{font-size:15px;font-weight:700;color:var(--ink)}
+.cita-sub{font-size:12px;color:var(--slate);margin-top:2px}
+.cita-badge{display:inline-flex;align-items:center;padding:3px 10px;border-radius:99px;font-size:11px;font-weight:700;white-space:nowrap}
+.badge-pendiente{background:#fef9c3;color:#854d0e;border:1px solid #fde68a}
+.badge-confirmada{background:#dcfce7;color:#166534;border:1px solid #bbf7d0}
+.badge-cancelada{background:#fee2e2;color:#991b1b;border:1px solid #fecaca}
+.badge-reprogramada{background:#e0f2fe;color:#075985;border:1px solid #bae6fd}
+.cita-info{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:12px}
+.cita-info-item{font-size:12px;color:var(--slate)}
+.cita-info-item strong{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:var(--ink);margin-bottom:1px}
+.cita-actions{display:flex;gap:8px;flex-wrap:wrap}
+.btn-accion{padding:7px 14px;border-radius:9px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;border:none;transition:.15s}
+.btn-confirmar{background:#dcfce7;color:#166534;border:1px solid #bbf7d0}
+.btn-confirmar:hover{background:#bbf7d0}
+.btn-cancelar{background:#fee2e2;color:#991b1b;border:1px solid #fecaca}
+.btn-cancelar:hover{background:#fecaca}
+.btn-reprogramar{background:#e0f2fe;color:#075985;border:1px solid #bae6fd}
+.btn-reprogramar:hover{background:#bae6fd}
+
+/* MODAL ACCIÓN */
+#modal-accion{display:none;position:fixed;inset:0;background:rgba(15,32,39,.6);backdrop-filter:blur(4px);z-index:400;align-items:flex-end;justify-content:center;padding:0}
+#modal-accion.on{display:flex}
+.accion-sheet{background:#fff;border-radius:20px 20px 0 0;padding:24px 20px 32px;width:100%;max-width:500px;animation:slideUp .3s ease}
+.accion-title{font-family:'DM Serif Display',serif;font-size:18px;color:var(--ink);margin-bottom:4px}
+.accion-sub{font-size:13px;color:var(--slate);margin-bottom:18px}
+.accion-field{margin-bottom:12px}
+.accion-field label{display:block;font-size:11px;font-weight:600;color:var(--slate);text-transform:uppercase;letter-spacing:.6px;margin-bottom:5px}
+.accion-field input,.accion-field textarea{width:100%;padding:10px 13px;border:1.5px solid #e2e8f0;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:14px;outline:none;transition:.2s}
+.accion-field input:focus,.accion-field textarea:focus{border-color:var(--teal);box-shadow:0 0 0 3px rgba(13,148,136,.12)}
+.accion-field textarea{resize:vertical;min-height:70px}
+.accion-btns{display:flex;gap:10px;margin-top:16px}
+.btn-accion-ok{flex:1;padding:12px;background:var(--teal);color:#fff;border:none;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;cursor:pointer;transition:.2s}
+.btn-accion-ok:hover{background:var(--teal-d)}
+.btn-accion-cancel{padding:12px 20px;background:none;border:1.5px solid #e2e8f0;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--slate);cursor:pointer}
+
+/* EDITOR CFG */
+.editor-section{margin-bottom:20px}
+.editor-section-title{font-size:13px;font-weight:700;color:var(--teal);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--border)}
+.editor-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:500px){.editor-grid{grid-template-columns:1fr}}
+.editor-field{display:flex;flex-direction:column;gap:5px}
+.editor-field.full{grid-column:1/-1}
+.editor-field label{font-size:11px;font-weight:600;color:var(--slate);text-transform:uppercase;letter-spacing:.6px}
+.editor-field input,.editor-field select,.editor-field textarea{padding:9px 12px;border:1.5px solid #e2e8f0;border-radius:9px;font-family:'DM Sans',sans-serif;font-size:14px;outline:none;transition:.2s;background:#fafcff;color:var(--ink)}
+.editor-field input:focus,.editor-field select:focus,.editor-field textarea:focus{border-color:var(--teal);box-shadow:0 0 0 3px rgba(13,148,136,.12);background:#fff}
+.editor-field textarea{resize:vertical;min-height:80px}
+.editor-field .readonly{background:#f1f5f9;color:var(--slate);cursor:not-allowed}
+.hint{font-size:11px;color:var(--slate);margin-top:3px}
+.btn-guardar{padding:12px 24px;background:var(--teal);color:#fff;border:none;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;cursor:pointer;transition:.2s;margin-top:4px}
+.btn-guardar:hover{background:var(--teal-d);transform:translateY(-1px)}
+
+/* EMPTY STATE */
+.empty{text-align:center;padding:48px 20px;color:var(--slate)}
+.empty-icon{font-size:40px;margin-bottom:12px}
+.empty-txt{font-size:15px;font-weight:600;margin-bottom:6px;color:var(--ink)}
+.empty-sub{font-size:13px}
+
+/* LOADING */
+.skeleton{background:linear-gradient(90deg,#e8f5f3 25%,#d0eeea 50%,#e8f5f3 75%);background-size:200%;animation:shimmer 1.4s infinite;border-radius:8px}
+.sk-text{height:16px;margin-bottom:8px}
+.sk-title{height:32px;width:60%;margin:0 auto 14px}
+#loading{padding:60px 24px;text-align:center}
+
+/* TOAST */
+.toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--ink);color:#fff;padding:12px 22px;border-radius:12px;font-size:14px;font-weight:500;box-shadow:0 8px 32px rgba(0,0,0,.2);transition:transform .35s cubic-bezier(.34,1.56,.64,1);z-index:999;white-space:nowrap;display:flex;align-items:center;gap:10px}
+.toast.show{transform:translateX(-50%) translateY(0)}
+.toast.success{background:var(--teal)}
+.toast.error{background:var(--red)}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
+@keyframes popIn{from{opacity:0;transform:scale(.8)}to{opacity:1;transform:scale(1)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes shimmer{to{background-position:-200% 0}}
+@keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+</style>
+</head>
+<body>
+
+<!-- ═══════ HEADER ═══════ -->
+<header>
+  <div class="logo">SaludPro</div>
+  <div class="header-right">
+    <div class="lic-badge" id="lic-badge">cargando…</div>
+    <button id="btn-medico-login" onclick="abrirLogin()" title="Acceso médico">🔐</button>
+  </div>
+</header>
+
+<!-- ═══════ VISTA PÚBLICA ═══════ -->
+<div id="vista-publica">
+
+  <div id="loading">
+    <div class="sk-title skeleton"></div>
+    <div class="sk-text skeleton" style="width:40%;margin:0 auto 8px"></div>
+    <div class="sk-text skeleton" style="width:55%;margin:0 auto"></div>
+  </div>
+
+  <div id="pub-content" style="display:none">
+    <div class="hero">
+      <div class="sello">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+        Consultorio verificado
+      </div>
+      <div class="avatar-wrap">
+        <div class="avatar" id="pub-avatar">?</div>
+        <div class="avatar-ring"></div>
+      </div>
+      <h1 id="pub-nombre">—</h1>
+      <div class="esp-tag" id="pub-esp">—</div>
+      <div class="cedula-line" id="pub-cedula"></div>
+    </div>
+
+    <div class="cards" id="pub-cards"></div>
+
+    <div class="section-title">Solicitar cita</div>
+    <div class="form-wrap">
+      <div class="form-card" id="form-section">
+        <div class="form-grid">
+          <div class="field"><label>Nombre completo *</label><input type="text" id="f-nombre" placeholder="Tu nombre completo"/></div>
+          <div class="field"><label>Teléfono *</label><input type="tel" id="f-tel" placeholder="55 1234 5678"/></div>
+          <div class="field"><label>Email</label><input type="email" id="f-email" placeholder="correo@ejemplo.com"/></div>
+          <div class="field"><label>Servicio</label><select id="f-servicio"></select></div>
+          <div class="field"><label>Fecha preferida</label><input type="date" id="f-fecha"/></div>
+          <div class="field"><label>Hora preferida</label><input type="time" id="f-hora"/></div>
+          <div class="field full"><label>Motivo de consulta</label><textarea id="f-motivo" placeholder="Describe brevemente el motivo de tu visita…"></textarea></div>
+        </div>
+        <button class="btn-submit" id="btn-enviar" onclick="enviarSolicitud()">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+          Enviar solicitud
+        </button>
+      </div>
+      <div class="confirm-card" id="confirm-card">
+        <div class="check">✅</div>
+        <h3>¡Solicitud enviada!</h3>
+        <p id="confirm-msg">Tu solicitud fue recibida. El consultorio la revisará pronto.</p>
+        <div class="folio-box" id="confirm-folio"></div>
+      </div>
+    </div>
+
+    <div class="section-title">Seguimiento de cita</div>
+    <div class="tracking-section">
+      <div class="tracking-input-wrap">
+        <input type="text" id="folio-input" placeholder="Token de seguimiento (ej: dr-garcia_uuid)"/>
+        <button class="btn-track" onclick="buscarSeguimiento()">Buscar</button>
+      </div>
+      <div class="tracking-result" id="tracking-result"></div>
+    </div>
+
+    <!-- QR + COMPARTIR -->
+    <div class="section-title">Comparte este consultorio</div>
+    <div class="qr-section">
+      <div class="qr-card">
+        <div class="qr-left">
+          <div class="qr-title">Agenda tu cita desde tu celular</div>
+          <div class="qr-sub">Escanea el código QR o comparte el enlace directo con tus contactos.</div>
+          <div class="qr-url-box" id="qr-url-txt">—</div>
+          <div class="qr-btns">
+            <button class="btn-qr btn-qr-copy" onclick="copiarUrlConsultorio(this)">📋 Copiar enlace</button>
+            <button class="btn-qr btn-qr-wa"   onclick="compartirWhatsApp()">💬 WhatsApp</button>
+            <button class="btn-qr btn-qr-mail" onclick="compartirEmail()">✉️ Correo</button>
+          </div>
+        </div>
+        <div class="qr-right">
+          <canvas id="qr-canvas" width="130" height="130"></canvas>
+          <div class="qr-hint">Escanea para abrir</div>
+        </div>
+      </div>
+    </div>
+
+    <footer>Powered by <strong>SaludPro</strong> — Plataforma médica verificada</footer>
+  </div>
+
+  <div id="pub-error" style="display:none;text-align:center;padding:80px 24px">
+    <div style="font-size:40px;margin-bottom:16px">⚠️</div>
+    <div id="pub-error-msg" style="font-size:16px;color:var(--slate)"></div>
+  </div>
+</div>
+
+<!-- ═══════ MODAL MAPA ═══════ -->
+<div id="modal-mapa">
+  <div class="mapa-sheet">
+    <div class="mapa-title">📍 Ubicación del consultorio</div>
+    <div class="mapa-dir" id="mapa-dir-txt">—</div>
+    <div class="mapa-frame">
+      <iframe id="mapa-iframe" src="" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+    </div>
+    <div class="mapa-btns">
+      <button class="btn-maps" onclick="abrirGoogleMaps()">🗺️ Abrir en Google Maps</button>
+      <button class="btn-cerrar-mapa" onclick="cerrarMapa()">Cerrar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════ MODAL LOGIN MÉDICO ═══════ -->
+<div id="modal-login">
+  <div class="login-card">
+    <h2>Acceso médico</h2>
+    <p id="login-sub">Ingresa tus credenciales</p>
+    <div class="login-err" id="login-err"></div>
+    <div class="login-field"><label>Email</label><input type="email" id="l-email" placeholder="doctor@correo.com" autocomplete="username"/></div>
+    <div class="login-field"><label>Contraseña</label><input type="password" id="l-pass" placeholder="••••••••" autocomplete="current-password"/></div>
+    <button class="btn-login" onclick="doLogin()">Entrar</button>
+    <button class="btn-cancel-login" onclick="cerrarLogin()">Cancelar</button>
+  </div>
+</div>
+
+<!-- ═══════ VISTA MÉDICO ═══════ -->
+<div id="vista-medico">
+  <div class="panel-bar">
+    <div class="panel-bar-name">👨‍⚕️ <span id="panel-nombre">Panel médico</span></div>
+    <div class="panel-bar-right">
+      <button class="btn-logout" onclick="cerrarSesion()">Salir 🚪</button>
+    </div>
+  </div>
+
+  <div class="tabs">
+    <button class="tab active" onclick="cambiarTab('agenda',this)">📅 Agenda</button>
+    <button class="tab" onclick="cambiarTab('historial',this)">📋 Historial</button>
+    <button class="tab" onclick="cambiarTab('consultorio',this)">🎨 Consultorio</button>
+  </div>
+
+  <!-- TAB AGENDA -->
+  <div class="tab-body active" id="tab-agenda">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:8px">
+      <strong style="font-size:15px">Citas pendientes</strong>
+      <button onclick="cargarCitas('Pendiente')" style="background:var(--teal-l);color:var(--teal);border:1px solid var(--border);padding:7px 14px;border-radius:9px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer">🔄 Actualizar</button>
+    </div>
+    <div id="lista-pendientes"></div>
+  </div>
+
+  <!-- TAB HISTORIAL -->
+  <div class="tab-body" id="tab-historial">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:8px">
+      <strong style="font-size:15px">Historial de citas</strong>
+      <select id="filtro-estado" onchange="cargarHistorial()" style="padding:7px 12px;border:1.5px solid #e2e8f0;border-radius:9px;font-family:'DM Sans',sans-serif;font-size:13px;background:#fafcff;color:var(--ink);outline:none">
+        <option value="">Todos los estados</option>
+        <option value="Confirmada">Confirmadas</option>
+        <option value="Cancelada">Canceladas</option>
+        <option value="Reprogramada">Reprogramadas</option>
+      </select>
+    </div>
+    <div id="lista-historial"></div>
+  </div>
+
+  <!-- TAB CONSULTORIO -->
+  <div class="tab-body" id="tab-consultorio">
+    <div class="editor-section">
+      <div class="editor-section-title">Identidad pública</div>
+      <div class="editor-grid">
+        <div class="editor-field">
+          <label>Nombre del consultorio</label>
+          <input type="text" class="readonly" id="e-nombre-com-ro" readonly/>
+          <div class="hint">Para cambiar el nombre legal, contacta al administrador.</div>
+        </div>
+        <div class="editor-field">
+          <label>Prefijo (opcional)</label>
+          <select id="e-prefijo">
+            <option value="">Sin prefijo</option>
+            <option value="Dr.">Dr.</option>
+            <option value="Dra.">Dra.</option>
+            <option value="Lic.">Lic.</option>
+            <option value="Mtro.">Mtro.</option>
+            <option value="Mtra.">Mtra.</option>
+            <option value="Psic.">Psic.</option>
+            <option value="Ing.">Ing.</option>
+          </select>
+        </div>
+        <div class="editor-field">
+          <label>Especialidad (visible)</label>
+          <input type="text" id="e-especialidad-txt" placeholder="Ej: Medicina Familiar, Nutriología"/>
+        </div>
+        <div class="editor-field">
+          <label>Cédula profesional</label>
+          <input type="text" id="e-cedula-txt" placeholder="1234567"/>
+        </div>
+      </div>
+    </div>
+
+    <div class="editor-section">
+      <div class="editor-section-title">Contacto y ubicación</div>
+      <div class="editor-grid">
+        <div class="editor-field">
+          <label>Teléfono</label>
+          <input type="tel" id="e-telefono" placeholder="55 1234 5678"/>
+        </div>
+        <div class="editor-field">
+          <label>WhatsApp</label>
+          <input type="tel" id="e-whatsapp" placeholder="55 1234 5678"/>
+        </div>
+        <div class="editor-field full">
+          <label>Dirección</label>
+          <input type="text" id="e-direccion" placeholder="Calle, número, colonia, ciudad"/>
+        </div>
+        <div class="editor-field full">
+          <label>Horario de atención</label>
+          <input type="text" id="e-horario" placeholder="Lun–Vie 9:00–18:00 · Sáb 9:00–13:00"/>
+        </div>
+      </div>
+    </div>
+
+    <div class="editor-section">
+      <div class="editor-section-title">Servicios disponibles</div>
+      <div class="editor-field">
+        <label>Un servicio por línea</label>
+        <textarea id="e-servicios" placeholder="Consulta general&#10;Primera vez&#10;Seguimiento&#10;Urgencia"></textarea>
+        <div class="hint">Los pacientes verán esta lista al solicitar cita.</div>
+      </div>
+    </div>
+
+    <button class="btn-guardar" onclick="guardarCfg()">💾 Guardar cambios</button>
+  </div>
+</div>
+
+<!-- ═══════ MODAL ACCIÓN CITA ═══════ -->
+<div id="modal-accion">
+  <div class="accion-sheet">
+    <div class="accion-title" id="accion-title">Confirmar cita</div>
+    <div class="accion-sub" id="accion-sub"></div>
+    <div id="accion-extra"></div>
+    <div class="accion-field">
+      <label>Mensaje al paciente (opcional)</label>
+      <textarea id="accion-mensaje" placeholder="Escribe un mensaje adicional para el paciente…"></textarea>
+    </div>
+    <div class="accion-btns">
+      <button class="btn-accion-ok" id="accion-ok-btn" onclick="confirmarAccion()">Confirmar</button>
+      <button class="btn-accion-cancel" onclick="cerrarAccion()">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ════════════════════════════════════════════════
+//  CONFIG
+// ════════════════════════════════════════════════
+var SCRIPT_URL_FALLBACK = "https://script.google.com/macros/s/AKfycbwu7VVHC3RgS1fXwOtnh3ebHf4Md9xVmYF8cVZznKekPVEDj79izRcQmECYPH4GLIsG/exec";
+var LIC    = (new URLSearchParams(window.location.search)).get("lic") || "";
+var MEDICO = null;
+var CFG    = {};
+var ACCION_PENDIENTE = null;
+var CFG_EDITOR_CARGADO = false;
+var DIRECCION_ACTUAL = "";
+
+function getScriptUrl(){
+  try{
+    var u=localStorage.getItem("sp_url");
+    if(u&&u.length>10) return u;
+    var c=JSON.parse(localStorage.getItem("sp_cfg")||"{}");
+    if(c.url&&c.url.length>10) return c.url;
+  }catch(e){}
+  return SCRIPT_URL_FALLBACK;
+}
+
+// ════════════════════════════════════════════════
+//  INIT — CARGA PÚBLICA
+// ════════════════════════════════════════════════
+function cargarConsultorio(){
+  if(!LIC){
+    document.getElementById("loading").style.display="none";
+    document.getElementById("pub-error").style.display="block";
+    document.getElementById("pub-error-msg").textContent="⚠ No se especificó una licencia médica. Agrega ?lic=tu-slug a la URL.";
+    return;
+  }
+  var url=getScriptUrl()+"?action=getCfgPublica&lic="+encodeURIComponent(LIC);
+  fetch(url)
+    .then(function(r){return r.json();})
+    .then(function(data){
+      if(!data.ok){
+        document.getElementById("loading").style.display="none";
+        document.getElementById("pub-error").style.display="block";
+        document.getElementById("pub-error-msg").textContent="⚠ "+( data.msg||"Consultorio no disponible");
+        return;
+      }
+      CFG=data.cfg||{};
+      // Actualizar sp_url si el backend devuelve scriptUrl
+      if(CFG.scriptUrl) localStorage.setItem("sp_url",CFG.scriptUrl);
+      renderPublico(CFG);
+    })
+    .catch(function(){
+      // Fallback demo
+      CFG=demoData();
+      renderPublico(CFG);
+    });
+}
+
+function renderPublico(cfg){
+  var prefijo  = cfg.prefijo||"";
+  var nombre   = cfg.nombre_com||cfg.nombre_legal||"Consultorio";
+  var display  = prefijo ? prefijo+" "+nombre : nombre;
+  var partes   = nombre.replace(/^(Dr|Dra|Lic|Mtro|Mtra|Psic|Ing)\.\s*/i,"").split(" ");
+  var iniciales= ((partes[0]||"")[0]||"").toUpperCase()+((partes[1]||"")[0]||"").toUpperCase();
+  var esp      = cfg.especialidad_txt||cfg.especialidad||"";
+  var espMap   = {medico:"Medicina General",dentista:"Odontología",psicologo:"Psicología",quiropractico:"Quiropráctica",nutriologo:"Nutriología"};
+  var espTxt   = espMap[esp]||esp;
+
+  document.getElementById("pub-avatar").textContent  = iniciales||"?";
+  document.getElementById("pub-nombre").textContent  = display;
+  document.getElementById("pub-esp").textContent     = espTxt;
+  document.getElementById("lic-badge").textContent   = LIC;
+  if(cfg.cedula) document.getElementById("pub-cedula").innerHTML='Cédula Prof. <span>'+cfg.cedula+'</span>';
+
+  var cards=[];
+  if(cfg.direccion) cards.push({icon:iconPin,  label:"Dirección",  val:cfg.direccion});
+  if(cfg.telefono)  cards.push({icon:iconPhone,label:"Teléfono",   val:cfg.telefono});
+  if(cfg.horario)   cards.push({icon:iconClock,label:"Horario",    val:cfg.horario});
+  if(cfg.whatsapp)  cards.push({icon:iconChat, label:"WhatsApp",   val:cfg.whatsapp});
+
+  document.getElementById("pub-cards").innerHTML=cards.map(function(c,i){
+    // La card de dirección (índice 0 si existe) abre el mapa al hacer click
+    var esDireccion = c.label==="Dirección";
+    var extra = esDireccion ? ' style="cursor:pointer;border-color:var(--teal)" onclick="abrirMapa()" title="Toca para ver el mapa"' : '';
+    var valTxt = esDireccion
+      ? '<div class="card-value" style="color:var(--teal);font-weight:600">'+c.val+' 📍</div>'
+      : '<div class="card-value">'+c.val+'</div>';
+    return '<div class="card"'+extra+'><div class="card-icon">'+c.icon+'</div><div><div class="card-label">'+c.label+'</div>'+valTxt+'</div></div>';
+  }).join("");
+
+  // Servicios en select
+  var servicios=cfg.servicios||["Consulta general","Primera vez","Seguimiento","Urgencia"];
+  if(typeof servicios==="string"){ try{servicios=JSON.parse(servicios);}catch(e){servicios=servicios.split(",");} }
+  var sel=document.getElementById("f-servicio");
+  sel.innerHTML=servicios.map(function(s){return'<option>'+s.trim()+'</option>';}).join("");
+
+  document.getElementById("f-fecha").min=new Date().toISOString().slice(0,10);
+  document.getElementById("loading").style.display="none";
+  document.getElementById("pub-content").style.display="block";
+  document.title=display+" — SaludPro";
+
+  // Guardar dirección para el mapa
+  DIRECCION_ACTUAL=cfg.direccion||"";
+
+  // Generar QR con la URL de este consultorio
+  var urlConsultorio=window.location.href.split("?")[0]+"?lic="+LIC;
+  generarQR(urlConsultorio);
+}
+
+// ════════════════════════════════════════════════
+//  FORMULARIO SOLICITUD
+// ════════════════════════════════════════════════
+function enviarSolicitud(){
+  var nombre =document.getElementById("f-nombre").value.trim();
+  var tel    =document.getElementById("f-tel").value.trim();
+  var email  =document.getElementById("f-email").value.trim();
+  var servicio=document.getElementById("f-servicio").value;
+  var fecha  =document.getElementById("f-fecha").value;
+  var hora   =document.getElementById("f-hora").value;
+  var motivo =document.getElementById("f-motivo").value.trim();
+
+  if(!nombre){showToast("El nombre es requerido","error");return;}
+  if(!tel)   {showToast("El teléfono es requerido","error");return;}
+
+  var SVG_SEND='<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>';
+  var btn=document.getElementById("btn-enviar");
+  btn.disabled=true; btn.innerHTML="⏳ Enviando…";
+
+  var data={nombre:nombre,telefono:tel,email:email,servicio:servicio,fecha:fecha,hora:hora,motivo:motivo};
+  var url=getScriptUrl()+"?action=addSolicitud&lic="+encodeURIComponent(LIC)+"&data="+encodeURIComponent(JSON.stringify(data));
+
+  fetch(url)
+    .then(function(r){return r.json();})
+    .then(function(res){
+      if(res.ok){
+        document.getElementById("form-section").style.display="none";
+        var cc=document.getElementById("confirm-card");
+        cc.style.display="block";
+        document.getElementById("confirm-folio").textContent="Folio: "+res.id;
+        document.getElementById("confirm-msg").textContent="Tu solicitud fue recibida. El consultorio la revisará pronto. Guarda tu folio para dar seguimiento.";
+        showToast("✅ Solicitud enviada","success");
+      } else {
+        showToast("❌ "+(res.msg||"Error al enviar"),"error");
+        btn.disabled=false;
+        btn.innerHTML=SVG_SEND+' Enviar solicitud';
+      }
+    })
+    .catch(function(){
+      document.getElementById("form-section").style.display="none";
+      document.getElementById("confirm-card").style.display="block";
+      document.getElementById("confirm-folio").textContent="Folio: SOL-"+Date.now().toString().slice(-6)+" (demo)";
+      document.getElementById("confirm-msg").textContent="Tu solicitud fue recibida. El consultorio la revisará pronto.";
+      btn.disabled=false; btn.innerHTML=SVG_SEND+' Enviar solicitud';
+    });
+}
+
+// ════════════════════════════════════════════════
+//  SEGUIMIENTO
+// ════════════════════════════════════════════════
+function buscarSeguimiento(){
+  var folio=document.getElementById("folio-input").value.trim();
+  if(!folio){showToast("Ingresa tu token","error");return;}
+  var res=document.getElementById("tracking-result");
+  res.style.display="block";
+  res.innerHTML='<div style="padding:18px;color:var(--slate);font-size:14px">🔄 Buscando…</div>';
+
+  if(folio.indexOf("_")<0){
+    res.innerHTML='<div style="padding:18px;color:var(--red);font-size:13px">⚠ Usa el token completo que recibiste por email (formato: slug_uuid)</div>';
+    return;
+  }
+  fetch(getScriptUrl()+"?action=getSolicitudByToken&token="+encodeURIComponent(folio))
+    .then(function(r){return r.json();})
+    .then(function(data){
+      if(!data.ok){res.innerHTML='<div style="padding:18px;color:var(--red);font-size:13px">⚠ '+(data.msg||"No encontrado")+'</div>';return;}
+      var s=data.solicitud;
+      var dots={"Confirmada":"dot-confirmed","Pendiente":"dot-pending","Cancelada":"dot-cancelled","Reprogramada":"dot-pending"};
+      var emojis={"Confirmada":"✅","Pendiente":"⏳","Cancelada":"❌","Reprogramada":"🔄"};
+      res.innerHTML='<div class="tr-header"><div class="tr-dot '+(dots[s.estado]||"dot-pending")+'"></div><strong style="font-size:15px">'+(emojis[s.estado]||"📋")+" "+s.estado+'</strong></div>'
+        +'<div class="tr-body">'
+        +'<div class="tr-row"><strong>Médico:</strong>'+(s.medico||"—")+'</div>'
+        +'<div class="tr-row"><strong>Servicio:</strong>'+(s.servicio||"—")+'</div>'
+        +'<div class="tr-row"><strong>Fecha:</strong>'+(s.fecha||"—")+(s.hora?" · "+s.hora:"")+'</div>'
+        +(s.prop_fecha?'<div class="tr-row"><strong>Nueva fecha:</strong>'+s.prop_fecha+(s.prop_hora?" · "+s.prop_hora:"")+'</div>':"")
+        +(s.estado_detalle?'<div class="tr-row"><strong>Nota:</strong>'+s.estado_detalle+'</div>':"")
+        +'<div class="tr-row"><strong>Folio:</strong>'+(s.folio||folio)+'</div>'
+        +'</div>';
+    })
+    .catch(function(){res.innerHTML='<div style="padding:18px;color:var(--red);font-size:13px">❌ Error de conexión</div>';});
+}
+
+// ════════════════════════════════════════════════
+//  LOGIN MÉDICO
+// ════════════════════════════════════════════════
+function abrirLogin(){
+  if(MEDICO){mostrarPanelMedico();return;}
+  document.getElementById("modal-login").classList.add("on");
+  setTimeout(function(){document.getElementById("l-email").focus();},200);
+}
+function cerrarLogin(){document.getElementById("modal-login").classList.remove("on");}
+
+document.addEventListener("keydown",function(e){
+  if(e.key==="Escape"){cerrarLogin();cerrarAccion();cerrarMapa();}
+  if(e.key==="Enter"&&document.getElementById("modal-login").classList.contains("on")) doLogin();
+});
+
+function doLogin(){
+  var email=document.getElementById("l-email").value.trim().toLowerCase();
+  var pass =document.getElementById("l-pass").value.trim();
+  var err  =document.getElementById("login-err");
+  err.classList.remove("on");
+  if(!email||!pass){err.textContent="Completa email y contraseña";err.classList.add("on");return;}
+
+  var btn=document.querySelector(".btn-login");
+  btn.textContent="Verificando…"; btn.disabled=true;
+
+  fetch(getScriptUrl()+"?action=checkLicense&email="+encodeURIComponent(email)+"&pass="+encodeURIComponent(pass))
+    .then(function(r){return r.json();})
+    .then(function(data){
+      btn.textContent="Entrar"; btn.disabled=false;
+      if(!data.ok){err.textContent=data.msg||"Credenciales incorrectas";err.classList.add("on");return;}
+      // Verificar que el slug del médico coincida con el LIC de la URL
+      if(data.user.slug!==LIC&&data.user.email!==LIC){
+        err.textContent="Esta cuenta no corresponde a este consultorio";err.classList.add("on");return;
+      }
+      MEDICO=data.user;
+      localStorage.setItem("sp_user",JSON.stringify({email:email,slug:MEDICO.slug,nombre_legal:MEDICO.nombre_legal,ts:Date.now()}));
+      cerrarLogin();
+      mostrarPanelMedico();
+      if(data.warning) showToast("⚠ "+data.warning);
+    })
+    .catch(function(){
+      btn.textContent="Entrar"; btn.disabled=false;
+      err.textContent="Error de conexión";err.classList.add("on");
+    });
+}
+
+function cerrarSesion(){
+  if(!confirm("¿Cerrar sesión?")) return;
+  MEDICO=null;
+  CFG_EDITOR_CARGADO=false;
+  localStorage.removeItem("sp_user");
+  document.getElementById("vista-medico").classList.remove("on");
+  document.getElementById("vista-publica").style.display="block";
+  document.getElementById("btn-medico-login").style.removeProperty("display");
+  showToast("Sesión cerrada");
+}
+
+// ════════════════════════════════════════════════
+//  PANEL MÉDICO
+// ════════════════════════════════════════════════
+function mostrarPanelMedico(){
+  document.getElementById("vista-publica").style.display="none";
+  document.getElementById("btn-medico-login").style.display="none";
+  document.getElementById("vista-medico").classList.add("on");
+  document.getElementById("panel-nombre").textContent=MEDICO.nombre_legal||MEDICO.email;
+  CFG_EDITOR_CARGADO=false;
+  cargarCitas("Pendiente");
+}
+
+function cambiarTab(tab,btn){
+  document.querySelectorAll(".tab").forEach(function(t){t.classList.remove("active");});
+  document.querySelectorAll(".tab-body").forEach(function(t){t.classList.remove("active");});
+  btn.classList.add("active");
+  document.getElementById("tab-"+tab).classList.add("active");
+  if(tab==="historial") cargarHistorial();
+  if(tab==="consultorio"&&!CFG_EDITOR_CARGADO){ cargarCfgEditor(); CFG_EDITOR_CARGADO=true; }
+}
+
+// ════════════════════════════════════════════════
+//  CITAS
+// ════════════════════════════════════════════════
+function cargarCitas(estado){
+  var cont=document.getElementById("lista-pendientes");
+  cont.innerHTML='<div style="color:var(--slate);font-size:14px;padding:20px 0">🔄 Cargando citas…</div>';
+  var url=getScriptUrl()+"?action=getSolicitudes&email="+encodeURIComponent(MEDICO.email)+"&lic="+encodeURIComponent(LIC)+"&estado="+encodeURIComponent(estado||"Pendiente");
+  fetch(url)
+    .then(function(r){return r.json();})
+    .then(function(data){
+      if(!data.ok){cont.innerHTML='<div style="color:var(--red);font-size:13px">❌ '+(data.msg||"Error")+'</div>';return;}
+      renderCitas(data.data||[],cont,true);
+    })
+    .catch(function(){cont.innerHTML='<div style="color:var(--red);font-size:13px">❌ Error de conexión</div>';});
+}
+
+function cargarHistorial(){
+  var cont=document.getElementById("lista-historial");
+  var filtro=document.getElementById("filtro-estado").value;
+  cont.innerHTML='<div style="color:var(--slate);font-size:14px;padding:20px 0">🔄 Cargando historial…</div>';
+  // Pedir al backend sin filtro de estado, luego excluir Pendientes en frontend
+  var url=getScriptUrl()+"?action=getSolicitudes&email="+encodeURIComponent(MEDICO.email)+"&lic="+encodeURIComponent(LIC)+"&limit=200";
+  fetch(url)
+    .then(function(r){return r.json();})
+    .then(function(data){
+      if(!data.ok){cont.innerHTML='<div style="color:var(--red);font-size:13px">❌ '+(data.msg||"Error")+'</div>';return;}
+      var todos=data.data||[];
+      // Excluir pendientes del historial
+      var hist=todos.filter(function(c){return c.estado!=="Pendiente";});
+      // Aplicar filtro adicional si eligió uno
+      if(filtro) hist=hist.filter(function(c){return c.estado===filtro;});
+      renderCitas(hist,cont,false);
+    })
+    .catch(function(){cont.innerHTML='<div style="color:var(--red);font-size:13px">❌ Error de conexión</div>';});
+}
+
+function renderCitas(citas, cont, conAcciones){
+  if(!citas||citas.length===0){
+    cont.innerHTML='<div class="empty"><div class="empty-icon">📭</div><div class="empty-txt">Sin citas</div><div class="empty-sub">No hay registros en esta sección</div></div>';
+    return;
+  }
+  var badges={"Pendiente":"badge-pendiente","Confirmada":"badge-confirmada","Cancelada":"badge-cancelada","Reprogramada":"badge-reprogramada"};
+  cont.innerHTML=citas.map(function(c){
+    var b=badges[c.estado]||"badge-pendiente";
+    var acciones="";
+    if(conAcciones&&c.estado==="Pendiente"){
+      acciones='<div class="cita-actions">'
+        +'<button class="btn-accion btn-confirmar" onclick="abrirAccion(\''+c.id+'\',\'Confirmada\',\''+esc(c.nombre)+'\')">✅ Confirmar</button>'
+        +'<button class="btn-accion btn-reprogramar" onclick="abrirAccion(\''+c.id+'\',\'Reprogramada\',\''+esc(c.nombre)+'\')">🔄 Reprogramar</button>'
+        +'<button class="btn-accion btn-cancelar" onclick="abrirAccion(\''+c.id+'\',\'Cancelada\',\''+esc(c.nombre)+'\')">❌ Cancelar</button>'
+        +'</div>';
+    }
+    return '<div class="cita-card">'
+      +'<div class="cita-top"><div><div class="cita-paciente">'+esc(c.nombre)+'</div><div class="cita-sub">'+esc(c.telefono||"")+(c.email?" · "+esc(c.email):"")+'</div></div>'
+      +'<span class="cita-badge '+b+'">'+c.estado+'</span></div>'
+      +'<div class="cita-info">'
+      +'<div class="cita-info-item"><strong>Servicio</strong>'+esc(c.servicio||"—")+'</div>'
+      +'<div class="cita-info-item"><strong>Fecha</strong>'+(c.fecha||"—")+(c.hora?" · "+c.hora:"")+'</div>'
+      +(c.motivo?'<div class="cita-info-item" style="grid-column:1/-1"><strong>Motivo</strong>'+esc(c.motivo)+'</div>':"")
+      +(c.prop_fecha?'<div class="cita-info-item"><strong>Nueva fecha</strong>'+c.prop_fecha+(c.prop_hora?" · "+c.prop_hora:"")+'</div>':"")
+      +'</div>'
+      +acciones
+      +'</div>';
+  }).join("");
+}
+
+// ════════════════════════════════════════════════
+//  MODAL ACCIÓN
+// ════════════════════════════════════════════════
+function abrirAccion(id, tipo, nombre){
+  ACCION_PENDIENTE={id:id,tipo:tipo,nombre:nombre};
+  var titulos={"Confirmada":"Confirmar cita","Cancelada":"Cancelar cita","Reprogramada":"Reprogramar cita"};
+  document.getElementById("accion-title").textContent=titulos[tipo]||tipo;
+  document.getElementById("accion-sub").textContent="Paciente: "+nombre;
+  document.getElementById("accion-mensaje").value="";
+
+  var extra="";
+  if(tipo==="Reprogramada"){
+    extra='<div class="accion-field"><label>Nueva fecha</label><input type="date" id="accion-fecha"/></div>'
+         +'<div class="accion-field"><label>Nueva hora</label><input type="time" id="accion-hora"/></div>';
+  }
+  document.getElementById("accion-extra").innerHTML=extra;
+
+  var colores={"Confirmada":"background:var(--teal)","Cancelada":"background:var(--red)","Reprogramada":"background:#0284c7"};
+  document.getElementById("accion-ok-btn").style.cssText=colores[tipo]||"";
+  document.getElementById("modal-accion").classList.add("on");
+}
+
+function cerrarAccion(){
+  document.getElementById("modal-accion").classList.remove("on");
+  ACCION_PENDIENTE=null;
+}
+
+function confirmarAccion(){
+  if(!ACCION_PENDIENTE) return;
+  var id      =ACCION_PENDIENTE.id;
+  var tipo    =ACCION_PENDIENTE.tipo;
+  var mensaje =document.getElementById("accion-mensaje").value.trim();
+  var propFecha="",propHora="";
+  if(tipo==="Reprogramada"){
+    propFecha=document.getElementById("accion-fecha")?document.getElementById("accion-fecha").value:"";
+    propHora =document.getElementById("accion-hora")?document.getElementById("accion-hora").value:"";
+    if(!propFecha){showToast("Selecciona la nueva fecha","error");return;}
+  }
+
+  var btn=document.getElementById("accion-ok-btn");
+  btn.textContent="Guardando…"; btn.disabled=true;
+
+  var url=getScriptUrl()
+    +"?action=updateSolicitud"
+    +"&email="+encodeURIComponent(MEDICO.email)
+    +"&lic="+encodeURIComponent(LIC)
+    +"&id="+encodeURIComponent(id)
+    +"&estado="+encodeURIComponent(tipo)
+    +(propFecha?"&prop_fecha="+encodeURIComponent(propFecha):"")
+    +(propHora?"&prop_hora="+encodeURIComponent(propHora):"")
+    +(mensaje?"&estado_detalle="+encodeURIComponent(mensaje):"");
+
+  fetch(url)
+    .then(function(r){return r.json();})
+    .then(function(data){
+      btn.textContent="Confirmar"; btn.disabled=false;
+      if(data.ok){
+        cerrarAccion();
+        showToast("✅ Cita actualizada","success");
+        cargarCitas("Pendiente");
+      } else {
+        showToast("❌ "+(data.msg||"Error"),"error");
+      }
+    })
+    .catch(function(){
+      btn.textContent="Confirmar"; btn.disabled=false;
+      showToast("❌ Error de conexión","error");
+    });
+}
+
+// ════════════════════════════════════════════════
+//  EDITOR CONSULTORIO
+// ════════════════════════════════════════════════
+function cargarCfgEditor(){
+  fetch(getScriptUrl()+"?action=getCfgMedico&email="+encodeURIComponent(MEDICO.email)+"&lic="+encodeURIComponent(LIC))
+    .then(function(r){return r.json();})
+    .then(function(data){
+      var c=data.ok?(data.cfg||{}):{};
+      document.getElementById("e-nombre-com-ro").value   = c.nombre_com||MEDICO.nombre_legal||"";
+      document.getElementById("e-prefijo").value          = c.prefijo||"";
+      document.getElementById("e-especialidad-txt").value = c.especialidad_txt||c.especialidad||"";
+      document.getElementById("e-cedula-txt").value       = c.cedula||MEDICO.cedula||"";
+      document.getElementById("e-telefono").value         = c.telefono||"";
+      document.getElementById("e-whatsapp").value         = c.whatsapp||"";
+      document.getElementById("e-direccion").value        = c.direccion||"";
+      document.getElementById("e-horario").value          = c.horario||"";
+      var svc=c.servicios||["Consulta general","Primera vez","Seguimiento","Urgencia"];
+      if(typeof svc==="string"){try{svc=JSON.parse(svc);}catch(e){svc=svc.split(",");}}
+      document.getElementById("e-servicios").value=svc.join("\n");
+    })
+    .catch(function(){
+      showToast("❌ No se pudo cargar la configuración","error");
+    });
+}
+
+function guardarCfg(){
+  var svc=document.getElementById("e-servicios").value.trim().split("\n").map(function(s){return s.trim();}).filter(Boolean);
+  var cfg={
+    prefijo:          document.getElementById("e-prefijo").value,
+    especialidad_txt: document.getElementById("e-especialidad-txt").value.trim(),
+    cedula:           document.getElementById("e-cedula-txt").value.trim(),
+    telefono:         document.getElementById("e-telefono").value.trim(),
+    whatsapp:         document.getElementById("e-whatsapp").value.trim(),
+    direccion:        document.getElementById("e-direccion").value.trim(),
+    horario:          document.getElementById("e-horario").value.trim(),
+    servicios:        JSON.stringify(svc)
+  };
+  var btn=document.querySelector(".btn-guardar");
+  btn.textContent="Guardando…"; btn.disabled=true;
+
+  fetch(getScriptUrl()
+    +"?action=saveCfgMedico"
+    +"&email="+encodeURIComponent(MEDICO.email)
+    +"&lic="+encodeURIComponent(LIC)
+    +"&data="+encodeURIComponent(JSON.stringify({cfg:cfg})))
+    .then(function(r){return r.json();})
+    .then(function(data){
+      btn.textContent="💾 Guardar cambios"; btn.disabled=false;
+      if(data.ok){
+        showToast("✅ Cambios guardados — se verán al abrir la landing","success");
+      } else {
+        showToast("❌ "+(data.msg||"Error al guardar"),"error");
+      }
+    })
+    .catch(function(){
+      btn.textContent="💾 Guardar cambios"; btn.disabled=false;
+      showToast("❌ Error de conexión","error");
+    });
+}
+
+// ════════════════════════════════════════════════
+//  ICONOS
+// ════════════════════════════════════════════════
+var iconPin  ='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>';
+var iconPhone='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.8 19.79 19.79 0 01.22 1.18 2 2 0 012.22 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.91 7.09a16 16 0 006 6l.66-.66a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.92v2z"/></svg>';
+var iconClock='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>';
+var iconChat ='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>';
+
+// ════════════════════════════════════════════════
+//  UTILS
+// ════════════════════════════════════════════════
+function demoData(){
+  return{verificado:true,nombre_legal:"Carlos García Mendoza",especialidad:"medico",cedula:"4521837",
+    nombre_com:"Consultorio Médico García",direccion:"Av. Insurgentes Sur 450, Piso 3, CDMX",
+    telefono:"55 8800 1234",horario:"Lun–Vie 9:00–18:00 · Sáb 9:00–13:00",whatsapp:"55 8800 1234",
+    servicios:["Consulta general","Primera vez","Seguimiento","Urgencia"]};
+}
+
+function esc(s){return String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
+
+function showToast(msg,type){
+  var t=document.getElementById("toast");
+  t.textContent=msg; t.className="toast "+(type||""); t.classList.add("show");
+  setTimeout(function(){t.classList.remove("show");},3500);
+}
+
+// ════════════════════════════════════════════════
+//  RECUPERAR SESIÓN AL RECARGAR
+// ════════════════════════════════════════════════
+function intentarRecuperarSesion(){
+  try{
+    var saved=JSON.parse(localStorage.getItem("sp_user")||"null");
+    if(!saved||!saved.email||!saved.slug) return;
+    if(Date.now()-saved.ts > 8*60*60*1000){ localStorage.removeItem("sp_user"); return; }
+    if(saved.slug!==LIC) return;
+    MEDICO={email:saved.email,slug:saved.slug,nombre_legal:saved.nombre_legal||saved.email};
+    mostrarPanelMedico();
+  }catch(e){}
+}
+
+// ════════════════════════════════════════════════
+//  QR + COMPARTIR
+// ════════════════════════════════════════════════
+function generarQR(url){
+  var canvas=document.getElementById("qr-canvas");
+  document.getElementById("qr-url-txt").textContent=url;
+  // QR usando API pública de Google Charts
+  var img=new Image();
+  img.onload=function(){
+    var ctx=canvas.getContext("2d");
+    ctx.clearRect(0,0,130,130);
+    ctx.drawImage(img,0,0,130,130);
+  };
+  img.src="https://chart.googleapis.com/chart?cht=qr&chs=260x260&chl="+encodeURIComponent(url)+"&choe=UTF-8";
+}
+
+function copiarUrlConsultorio(btn){
+  var url=window.location.href.split("?")[0]+"?lic="+LIC;
+  if(navigator.clipboard&&window.isSecureContext){
+    navigator.clipboard.writeText(url).then(function(){
+      btn.textContent="✅ Copiado";
+      setTimeout(function(){btn.innerHTML="📋 Copiar enlace";},2000);
+    });
+  } else {
+    // Fallback para HTTP o navegadores sin clipboard API
+    var ta=document.createElement("textarea");
+    ta.value=url; ta.style.position="fixed"; ta.style.opacity="0";
+    document.body.appendChild(ta); ta.select();
+    document.execCommand("copy"); document.body.removeChild(ta);
+    btn.textContent="✅ Copiado";
+    setTimeout(function(){btn.innerHTML="📋 Copiar enlace";},2000);
+  }
+}
+
+function compartirWhatsApp(){
+  var url=window.location.href.split("?")[0]+"?lic="+LIC;
+  var nombre=document.getElementById("pub-nombre").textContent||"el consultorio";
+  var msg="👨‍⚕️ *"+nombre+"*\n\nSolicita tu cita en línea:\n"+url;
+  window.open("https://wa.me/?text="+encodeURIComponent(msg),"_blank");
+}
+
+function compartirEmail(){
+  var url=window.location.href.split("?")[0]+"?lic="+LIC;
+  var nombre=document.getElementById("pub-nombre").textContent||"el consultorio";
+  var asunto="Agenda tu cita con "+nombre;
+  var cuerpo="Hola,\n\nTe comparto el enlace para solicitar cita en línea con "+nombre+":\n\n"+url+"\n\nSaludos";
+  window.location.href="mailto:?subject="+encodeURIComponent(asunto)+"&body="+encodeURIComponent(cuerpo);
+}
+
+// ════════════════════════════════════════════════
+//  MAPA EMERGENTE
+// ════════════════════════════════════════════════
+function abrirMapa(){
+  if(!DIRECCION_ACTUAL){showToast("Sin dirección registrada","error");return;}
+  document.getElementById("mapa-dir-txt").textContent=DIRECCION_ACTUAL;
+  var q=encodeURIComponent(DIRECCION_ACTUAL);
+  document.getElementById("mapa-iframe").src=
+    "https://maps.google.com/maps?q="+q+"&output=embed&z=15";
+  document.getElementById("modal-mapa").classList.add("on");
+}
+
+function cerrarMapa(){
+  document.getElementById("modal-mapa").classList.remove("on");
+  // Detener el iframe al cerrar
+  document.getElementById("mapa-iframe").src="";
+}
+
+function abrirGoogleMaps(){
+  if(!DIRECCION_ACTUAL) return;
+  window.open("https://www.google.com/maps/search/"+encodeURIComponent(DIRECCION_ACTUAL),"_blank");
+}
+
+// Iniciar
+cargarConsultorio();
+intentarRecuperarSesion();
+</script>
+</body>
+</html>
